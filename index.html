@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mon Espace DIGIY</title>
+
+  <style>
+    :root{
+      --bg:#022c22;--bg2:#065f46;--card:#052e16;
+      --accent:#facc15;--text:#e5e7eb;--muted:#9ca3af;--danger:#f97373;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top,#16a34a22 0,transparent 55%),
+        linear-gradient(135deg,var(--bg),var(--bg2));
+      padding:20px;
+    }
+    .card{
+      max-width:520px;width:100%;
+      background:linear-gradient(145deg,rgba(5,46,22,.97),rgba(6,95,70,.96));
+      border-radius:24px;
+      border:1px solid rgba(15,118,110,.45);
+      padding:24px 20px;
+      text-align:center;
+      box-shadow:0 24px 60px rgba(0,0,0,.75);
+    }
+    .ico{
+      width:60px;height:60px;margin:0 auto 10px;
+      border-radius:50%;
+      display:grid;place-items:center;
+      background:
+        radial-gradient(circle at 30% 0,#facc15 0,transparent 55%),
+        radial-gradient(circle at bottom,#16a34a66 0,transparent 60%);
+      border:1px solid rgba(250,204,21,.7);
+      color:#022c22;font-size:26px;font-weight:900;
+      box-shadow:0 0 25px rgba(250,204,21,.45);
+    }
+    h1{
+      font-size:18px;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      margin-bottom:8px;
+    }
+    p{
+      font-size:14px;
+      color:var(--muted);
+      line-height:1.6;
+    }
+    .small{
+      margin-top:14px;
+      font-size:12px;
+      color:var(--muted);
+    }
+    .err{color:var(--danger)}
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+  <div class="card">
+    <div class="ico">🦅</div>
+    <h1>MON ESPACE DIGIY</h1>
+    <p id="status">Chargement de ton espace sécurisé…</p>
+    <div class="small" id="mini"></div>
+  </div>
+
+<script>
+(function(){
+  const SUPABASE_URL = "https://wesqmwjjtsefyjnluosj.supabase.co";
+  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indlc3Ftd2pqdHNlZnlqbmx1b3NqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUxNzg4ODIsImV4cCI6MjA4MDc1NDg4Mn0.dZfYOc2iL2_wRYL3zExZFsFSBK6AbMeOid2LrIjcTdA";
+
+  const LOGIN_URL = "https://beauville.github.io/digiy-loc-pro-/";
+
+  const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const statusEl = document.getElementById("status");
+  const miniEl = document.getElementById("mini");
+
+  async function init(){
+    const { data } = await client.auth.getSession();
+
+    if(!data || !data.session){
+      statusEl.textContent = "Accès non autorisé.";
+      miniEl.innerHTML = "Redirection vers la connexion…";
+      setTimeout(()=>location.href = LOGIN_URL, 1200);
+      return;
+    }
+
+    const { data: userData } = await client.auth.getUser();
+    const user = userData?.user;
+
+    statusEl.textContent = "Bienvenue dans ton espace DIGIY 👑";
+    miniEl.innerHTML =
+      "Ton espace est en cours de déploiement.<br>" +
+      "Tu seras notifié dès l’activation complète de tes modules.";
+  }
+
+  init();
+})();
+</script>
+
+</body>
+</html>
