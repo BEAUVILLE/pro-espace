@@ -1,435 +1,144 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mon Espace DIGIY</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mon Espace DIGIY</title>
 
-  <style>
-    :root{
-      --bg:#022c22; --bg2:#065f46; --card:#052e16;
-      --accent:#facc15; --text:#e5e7eb; --muted:#9ca3af;
-      --danger:#f97373; --ok:#22c55e;
-      --line:rgba(148,163,184,.28);
-      --glass:rgba(2,44,34,.35);
-      --shadow:rgba(0,0,0,.75);
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto;
-      color:var(--text);
-      background:
-        radial-gradient(circle at top,#16a34a22 0,transparent 55%),
-        radial-gradient(circle at 20% 85%, rgba(250,204,21,.14) 0, transparent 55%),
-        linear-gradient(135deg,var(--bg),var(--bg2));
-      padding:20px;
-    }
-    .card{
-      max-width:640px;width:100%;
-      background:linear-gradient(145deg,rgba(5,46,22,.97),rgba(6,95,70,.96));
-      border-radius:26px;
-      border:1px solid rgba(15,118,110,.45);
-      padding:22px 18px;
-      box-shadow:0 24px 60px var(--shadow);
-      position:relative;
-      overflow:hidden;
-    }
-    .card:before{
-      content:"";
-      position:absolute; inset:-2px;
-      background:
-        radial-gradient(circle at 18% 0, rgba(250,204,21,.14), transparent 45%),
-        radial-gradient(circle at 82% 120%, rgba(34,197,94,.12), transparent 55%);
-      pointer-events:none;
-    }
-    .inner{position:relative; z-index:2}
-    .top{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:10px;
-    }
-    .brand{display:flex;align-items:center;gap:10px}
-    .ico{
-      width:54px;height:54px;
-      border-radius:50%;
-      display:grid;place-items:center;
-      background:
-        radial-gradient(circle at 30% 0,#facc15 0,transparent 55%),
-        radial-gradient(circle at bottom,#16a34a66 0,transparent 60%);
-      border:1px solid rgba(250,204,21,.7);
-      color:#022c22;font-size:24px;font-weight:900;
-      box-shadow:0 0 24px rgba(250,204,21,.35);
-      flex:0 0 auto;
-    }
-    h1{
-      font-size:14px;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      margin-bottom:4px;
-    }
-    .subtitle{
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.4;
-    }
-    .pillbar{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-    .pill{
-      border:1px solid var(--line);
-      background:rgba(250,204,21,.10);
-      color:var(--text);
-      padding:8px 10px;
-      border-radius:999px;
-      font-weight:900;
-      font-size:12px;
-      cursor:pointer;
-      transition:.2s;
-      user-select:none;
-    }
-    .pill:hover{transform:translateY(-1px);border-color:rgba(250,204,21,.6)}
-    .pill.ghost{background:rgba(2,44,34,.25)}
-    .pill.danger{background:rgba(249,115,115,.12);border-color:rgba(249,115,115,.35)}
-    .sep{height:1px;background:var(--line);margin:14px 0}
+<style>
+:root{
+  --bg:#022c22;--bg2:#065f46;--card:#052e16;
+  --accent:#facc15;--text:#e5e7eb;--muted:#9ca3af;
+  --danger:#f97373;--ok:#22c55e;
+  --line:rgba(148,163,184,.28);
+  --glass:rgba(2,44,34,.35);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto;
+  background:linear-gradient(135deg,var(--bg),var(--bg2));
+  color:var(--text);padding:20px;
+}
+.card{
+  max-width:640px;width:100%;
+  background:linear-gradient(145deg,rgba(5,46,22,.97),rgba(6,95,70,.96));
+  border-radius:26px;border:1px solid rgba(15,118,110,.45);
+  padding:22px;box-shadow:0 24px 60px rgba(0,0,0,.7);
+}
+.top{display:flex;justify-content:space-between;align-items:center}
+.ico{
+  width:52px;height:52px;border-radius:50%;
+  display:grid;place-items:center;
+  background:radial-gradient(circle at 30% 0,#facc15,transparent 55%);
+  color:#022c22;font-size:24px;font-weight:900;
+}
+h1{font-size:14px;letter-spacing:.14em}
+.subtitle{font-size:12px;color:var(--muted)}
+.pill{
+  border:1px solid var(--line);
+  background:rgba(250,204,21,.12);
+  padding:8px 12px;border-radius:999px;
+  font-weight:900;font-size:12px;cursor:pointer;
+}
+.sep{height:1px;background:var(--line);margin:14px 0}
+#status{font-size:14px;color:var(--muted)}
+#mini{font-size:12px;color:var(--muted);margin-top:6px}
+.ok{color:var(--ok)} .err{color:var(--danger)}
+.grid{display:grid;gap:10px;margin-top:14px}
+.btn{
+  width:100%;padding:14px;
+  background:var(--glass);border:1px solid var(--line);
+  border-radius:16px;color:var(--text);
+  display:flex;justify-content:space-between;align-items:center;
+  cursor:pointer;font-weight:900;
+}
+.btn:hover{border-color:rgba(250,204,21,.6)}
+.tag{
+  padding:6px 10px;border-radius:999px;
+  background:rgba(250,204,21,.12);
+  border:1px solid rgba(250,204,21,.35);
+  font-size:12px;
+}
+</style>
 
-    #status{font-size:14px;color:var(--muted);line-height:1.6}
-    #mini{margin-top:10px;font-size:12px;color:var(--muted);line-height:1.6}
-    .err{color:var(--danger)}
-    .ok{color:var(--ok)}
-
-    .chooser{display:none;margin-top:14px;text-align:left}
-    .grid{display:grid;gap:10px}
-    .btn{
-      width:100%;
-      border:1px solid var(--line);
-      background:var(--glass);
-      color:var(--text);
-      border-radius:16px;
-      padding:12px 12px;
-      cursor:pointer;
-      font-weight:900;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      transition:.2s;
-      text-align:left;
-    }
-    .btn:hover{
-      transform:translateY(-1px);
-      border-color:rgba(250,204,21,.6);
-      box-shadow:0 14px 34px rgba(0,0,0,.25);
-    }
-    .left{display:flex;flex-direction:column;gap:2px}
-    .title{font-size:14px;font-weight:1000;letter-spacing:.02em}
-    .desc{font-size:12px;color:var(--muted);font-weight:700}
-    .tag{
-      font-size:12px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid rgba(250,204,21,.35);
-      background:rgba(250,204,21,.12);
-      color:#fff;
-      white-space:nowrap;
-      font-weight:900;
-    }
-    .tag.last{
-      border-color:rgba(34,197,94,.45);
-      background:rgba(34,197,94,.12);
-    }
-    .foot{
-      margin-top:14px;
-      padding-top:12px;
-      border-top:1px solid var(--line);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
-      font-size:12px;
-      color:var(--muted);
-    }
-    .brandmark{
-      font-weight:1000;
-      letter-spacing:.08em;
-      color:rgba(250,204,21,.95);
-    }
-  </style>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 
 <body>
-  <div class="card">
-    <div class="inner">
-      <div class="top">
-        <div class="brand">
-          <div class="ico">🦅</div>
-          <div>
-            <h1>MON ESPACE DIGIY</h1>
-            <div class="subtitle" id="subtitle">Espace sécurisé multi-modules</div>
-          </div>
-        </div>
-
-        <div class="pillbar">
-          <div class="pill ghost" id="btnChoose" title="Afficher le menu modules">Changer de module</div>
-          <div class="pill danger" id="btnLogout" title="Se déconnecter">Déconnexion</div>
-        </div>
-      </div>
-
-      <div class="sep"></div>
-
-      <div id="status">Chargement de ton espace sécurisé…</div>
-      <div id="mini"></div>
-
-      <div class="chooser" id="chooser">
-        <div style="margin:10px 0 8px;color:var(--muted);font-size:12px;font-weight:900;">
-          Choisis ton module :
-        </div>
-        <div class="grid" id="modulesGrid"></div>
-      </div>
-
-      <div class="foot">
-        <div>Connecté à <span class="brandmark">DIGIYLYFE</span> ∞</div>
-        <div id="where"></div>
-      </div>
+<div class="card">
+  <div class="top">
+    <div>
+      <div class="ico">🦅</div>
+      <h1>MON ESPACE DIGIY</h1>
+      <div class="subtitle" id="subtitle">Espace ROI</div>
     </div>
+    <div class="pill" id="logout">Déconnexion</div>
   </div>
 
+  <div class="sep"></div>
+
+  <div id="status">Chargement…</div>
+  <div id="mini"></div>
+
+  <div class="grid" id="modules"></div>
+</div>
+
 <script>
-(async function(){
-  // =========================
-  // CONFIG
-  // =========================
-  const SUPABASE_URL = "https://wesqmwjjtsefyjnluosj.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indlc3Ftd2pqdHNlZnlqbmx1b3NqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUxNzg4ODIsImV4cCI6MjA4MDc1NDg4Mn0.dZfYOc2iL2_wRYL3zExZFsFSBK6AbMeOid2LrIjcTdA";
+(async()=>{
+const SUPABASE_URL="https://wesqmwjjtsefyjnluosj.supabase.co";
+const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indlc3Ftd2pqdHNlZnlqbmx1b3NqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUxNzg4ODIsImV4cCI6MjA4MDc1NDg4Mn0.dZfYOc2iL2_wRYL3zExZFsFSBK6AbMeOid2LrIjcTdA";
 
-  // ✅ Connexion OTP
-  const LOGIN_URL = "https://beauville.github.io/login-otp-fix/";
+const LOGIN_URL="https://beauville.github.io/login-otp-fix/";
+const MODULES_URL={
+  chauffeur:"https://beauville.github.io/digiy-chauffeur/",
+  loc:"https://beauville.github.io/digiy-loc-pro-/",
+  resto:"https://beauville.github.io/digiy-resto-pro/",
+  market:"https://beauville.github.io/digiy-market-pro/"
+};
 
-  // ✅ Mon Espace (pour les boutons dans les modules)
-  const MON_ESPACE_URL = "https://beauville.github.io/mon-espace-digiy/";
+const client=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const status=document.getElementById("status");
+const mini=document.getElementById("mini");
+const grid=document.getElementById("modules");
 
-  // ✅ Mapping modules -> URL (ABSOLU)
-  const MODULE_ROUTES = {
-    // Chauffeur
-    "chauffeur": "https://beauville.github.io/digiy-chauffeur/",
-    "driver":    "https://beauville.github.io/digiy-chauffeur/",
-    "vtc":       "https://beauville.github.io/digiy-chauffeur/",
-    "taxi":      "https://beauville.github.io/digiy-chauffeur/",
+const {data:s}=await client.auth.getSession();
+if(!s?.session){location.href=LOGIN_URL;return;}
 
-    // LOC
-    "loc":       "https://beauville.github.io/digiy-loc-pro-/",
+const {data:u}=await client.auth.getUser();
+const user=u.user;
 
-    // Exemples (si existants)
-    "resto":     "https://beauville.github.io/digiy-resto-pro/",
-    "market":    "https://beauville.github.io/digiy-market-pro/",
-    "pos":       "https://beauville.github.io/digiy-pos-pro/"
-  };
+const {data:pro}=await client
+  .from("pros")
+  .select("modules,is_active,display_name,auth_user_id")
+  .eq("auth_user_id",user.id)
+  .maybeSingle();
 
-  const FALLBACK_URL = "https://beauville.github.io/digiy-hub/";
-  const LAST_KEY = "digiy_last_module";
+if(!pro||!pro.is_active){
+  status.innerHTML="<span class='err'>Compte non actif</span>";
+  return;
+}
 
-  // =========================
-  // DOM
-  // =========================
-  const statusEl  = document.getElementById("status");
-  const miniEl    = document.getElementById("mini");
-  const subtitle  = document.getElementById("subtitle");
-  const chooser   = document.getElementById("chooser");
-  const gridEl    = document.getElementById("modulesGrid");
-  const whereEl   = document.getElementById("where");
-  const btnChoose = document.getElementById("btnChoose");
-  const btnLogout = document.getElementById("btnLogout");
+// 🔥 PRIVILÈGE ROI : TOI TU VOIS TOUT
+const modules=[...new Set(pro.modules||[])];
 
-  // =========================
-  // URL PARAMS (menu forcé)
-  // =========================
-  const params = new URLSearchParams(window.location.search);
-  const forceChoose = params.get("choose") === "1";
+status.innerHTML="<span class='ok'>Accès total validé</span>";
+mini.innerHTML="Choisis ton module 👑";
 
-  const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  const go = (url) => setTimeout(() => window.location.replace(url), 650);
+modules.forEach(m=>{
+  const btn=document.createElement("div");
+  btn.className="btn";
+  btn.innerHTML=`<div>${m.toUpperCase()}</div><span class="tag">ouvrir</span>`;
+  btn.onclick=()=>location.href=MODULES_URL[m];
+  grid.appendChild(btn);
+});
 
-  const normalizeModules = (arr) =>
-    (arr || []).map(m => String(m).trim().toLowerCase()).filter(Boolean);
-
-  const resolveUrlForModule = (mod) => MODULE_ROUTES[mod] || null;
-
-  const labelForModule = (mod) => {
-    const map = {
-      chauffeur:"DIGIY CHAUFFEUR • PRO",
-      driver:"DIGIY CHAUFFEUR • PRO",
-      vtc:"DIGIY CHAUFFEUR • PRO",
-      taxi:"DIGIY CHAUFFEUR • PRO",
-      loc:"DIGIY LOC • PRO",
-      resto:"DIGIY RESTO • PRO",
-      market:"DIGIY MARKET • PRO",
-      pos:"DIGIY POS • PRO"
-    };
-    return map[mod] || ("DIGIY • " + mod.toUpperCase());
-  };
-
-  const descForModule = (mod) => {
-    const map = {
-      chauffeur:"Trajets, chauffeurs, demandes, planning",
-      loc:"Logements, calendrier, réservations",
-      resto:"Commandes, tables, caisse, menus",
-      market:"Produits, commandes, stock",
-      pos:"Caisse, tickets, inventaire"
-    };
-    return map[mod] || "Accès direct au module";
-  };
-
-  function showChooser(modules, last){
-    chooser.style.display = "block";
-    gridEl.innerHTML = "";
-
-    const unique = Array.from(new Set(modules));
-
-    subtitle.textContent = unique.length + " module(s) actif(s)";
-    miniEl.innerHTML = `
-      ${forceChoose ? "<span class='ok'>Menu forcé ✅</span><br>" : ""}
-      Choisis ton module, et on décolle.
-    `;
-
-    unique.forEach(mod => {
-      const url = resolveUrlForModule(mod) || FALLBACK_URL;
-      const isLast = last && mod === last;
-
-      const btn = document.createElement("button");
-      btn.className = "btn";
-      btn.innerHTML = `
-        <div class="left">
-          <div class="title">${labelForModule(mod)}</div>
-          <div class="desc">${descForModule(mod)}</div>
-        </div>
-        <span class="tag ${isLast ? "last" : ""}">${isLast ? "dernier" : mod}</span>
-      `;
-
-      btn.addEventListener("click", () => {
-        localStorage.setItem(LAST_KEY, mod);
-        statusEl.innerHTML = "<span class='ok'>Redirection…</span>";
-        miniEl.textContent = "On ouvre ton module.";
-        go(url);
-      });
-
-      gridEl.appendChild(btn);
-    });
-  }
-
-  // =========================
-  // UI actions
-  // =========================
-  btnChoose.addEventListener("click", () => {
-    // 👉 menu forcé, même si dernier module existe
-    window.location.href = MON_ESPACE_URL + "?choose=1";
-  });
-
-  btnLogout.addEventListener("click", async () => {
-    try{ await client.auth.signOut(); }catch(e){}
-    localStorage.removeItem(LAST_KEY);
-    statusEl.innerHTML = "<span class='err'>Déconnecté.</span>";
-    miniEl.textContent = "Retour connexion…";
-    go(LOGIN_URL);
-  });
-
-  // =========================
-  // 1) Session
-  // =========================
-  const { data: sessionData } = await client.auth.getSession();
-  if (!sessionData?.session) {
-    statusEl.innerHTML = "<span class='err'>Accès non autorisé</span>";
-    miniEl.textContent = "Retour vers la connexion…";
-    return go(LOGIN_URL);
-  }
-
-  // =========================
-  // 2) User
-  // =========================
-  const { data: userData } = await client.auth.getUser();
-  const user = userData?.user;
-  if (!user?.id) {
-    statusEl.innerHTML = "<span class='err'>Session invalide</span>";
-    miniEl.textContent = "Retour vers la connexion…";
-    return go(LOGIN_URL);
-  }
-
-  statusEl.textContent = "Vérification de ton profil PRO…";
-  miniEl.textContent = "Lecture sécurisée de la base DIGIY…";
-
-  // =========================
-  // 3) DB tranche
-  // =========================
-  const { data: pro, error } = await client
-    .from("pros")
-    .select("modules, is_active, display_name, business_name, city, country")
-    .eq("auth_user_id", user.id)
-    .maybeSingle();
-
-  if (error || !pro) {
-    console.error("❌ PRO introuvable", error);
-    statusEl.innerHTML = "<span class='err'>Profil PRO introuvable</span>";
-    miniEl.innerHTML = "Compte non rattaché à un PRO. Retour connexion…";
-    return go(LOGIN_URL);
-  }
-
-  const who = pro.display_name || pro.business_name || "";
-  const where = [pro.city, pro.country].filter(Boolean).join(", ");
-  whereEl.textContent = where || "";
-
-  if (!pro.is_active) {
-    statusEl.innerHTML = "<span class='err'>Compte en attente d’activation</span>";
-    miniEl.innerHTML = `Bienvenue ${who ? "<b>"+who+"</b>" : ""}<br>Ton compte est connecté, mais pas encore actif.`;
-    subtitle.textContent = "En attente d’activation";
-    return;
-  }
-
-  const modules = normalizeModules(pro.modules);
-  const last = localStorage.getItem(LAST_KEY);
-
-  statusEl.innerHTML = "<span class='ok'>Accès validé ✅</span>";
-  miniEl.innerHTML = `Bienvenue ${who ? "<b>"+who+"</b>" : ""}<br>Préparation de ton module…`;
-
-  // 4) Aucun module
-  if (!modules.length) {
-    miniEl.innerHTML += "<br><span class='err'>Aucun module assigné.</span> Direction HUB…";
-    return go(FALLBACK_URL);
-  }
-
-  // 5) Un seul module
-  const uniqueCount = new Set(modules).size;
-  if (uniqueCount === 1) {
-    const mod = modules[0];
-    const url = resolveUrlForModule(mod) || FALLBACK_URL;
-    localStorage.setItem(LAST_KEY, mod);
-    miniEl.innerHTML = `Module détecté : <b>${mod}</b><br>Redirection…`;
-    return go(url);
-  }
-
-  // 6) Plusieurs modules
-  // ✅ si menu forcé -> afficher direct
-  if (forceChoose) {
-    showChooser(modules, last);
-    return;
-  }
-
-  // ✅ sinon auto-redirect vers dernier module si possible
-  if (last && modules.includes(last)) {
-    const url = resolveUrlForModule(last) || FALLBACK_URL;
-    miniEl.innerHTML = `Dernier module utilisé : <b>${last}</b><br>Redirection automatique…<br><span class="muted">Pour choisir : clique “Changer de module”.</span>`;
-    return go(url);
-  }
-
-  // ✅ sinon menu
-  showChooser(modules, last);
-
+document.getElementById("logout").onclick=async()=>{
+  await client.auth.signOut();
+  location.href=LOGIN_URL;
+};
 })();
 </script>
-
 </body>
 </html>
