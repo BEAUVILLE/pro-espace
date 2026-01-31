@@ -105,7 +105,7 @@ h1{font-size:14px;letter-spacing:.14em}
       <div class="ico">🦅</div>
       <div>
         <h1>MON ESPACE PRO DIGIY</h1>
-        <div class="subtitle" id="subtitle">JB BEAUVILLE • Accès PRO</div>
+        <div class="subtitle" id="subtitle">Accès PRO</div>
       </div>
     </div>
     <div class="pill" id="logout">Déconnexion</div>
@@ -124,50 +124,31 @@ h1{font-size:14px;letter-spacing:.14em}
   <div class="grid" id="modules"></div>
 
   <div class="note">
-    <b>Règle DIGIY :</b> si ton abonnement n’est pas actif, tu vois “Activation en cours”.
-    Une fois activé, l’accès est direct. <b>0% commission</b>.
+    <b>Règle DIGIY :</b> accès cockpit uniquement via <b>PIN</b>.
+    Une fois entré, tout reste ouvert. <b>0% commission</b>.
   </div>
 </div>
 
 <script>
 (async()=>{
+
   // =========================
-  // CONFIG
+  // CONFIG DIGIY
   // =========================
   const SUPABASE_URL="https://wesqmwjjtsefyjnluosj.supabase.co";
-  const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indlc3Ftd2pqdHNlZnlqbmx1b3NqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUxNzg4ODIsImV4cCI6MjA4MDc1NDg4Mn0.dZfYOc2iL2_wRYL3zExZFsFSBK6AbMeOid2LrIjcTdA";
+  const SUPABASE_ANON_KEY="TON_KEY_ICI";
 
   const ENTRY_URL = "https://beauville.github.io/inscription-digiy/";
 
-  // Liens modules (mets les bons liens chez toi)
+  // ✅ IMPORTANT : chaque module ouvre via pin.html
   const MODULES_URL = {
-  DRIVER_PRO:  "https://beauville.github.io/digiy-pro-driver/",
-  LOC:         "https://beauville.github.io/digiy-loc-pro-/",
-  RESTO:       "https://beauville.github.io/digiy-resto-pro/",
-  RESA:        "https://beauville.github.io/digiy-resa-pro/",
-  MARKET:      "https://beauville.github.io/digiy-market-pro/",
-  BUILD:       "https://beauville.github.io/digiy-build-pro/",
-  POS:         "https://beauville.github.io/digiy-pos-pro/",
-  JOBS:        "https://beauville.github.io/digiy-jobs-pro/",
-  FRET:        "https://beauville.github.io/digiy-fret-pro/",
-  FRET_CLIENT: "https://beauville.github.io/digiy-fret-client/",
-  EXPLORER:    "https://beauville.github.io/digiy-explorer/"
-};
-
-  // RPC (tu as déjà is_driver_active). Ici on veut un RPC universel.
-  // Si tu n’as PAS encore: on fallback avec driver only.
-  // -> idéal: créer rpc is_module_active(p_phone, p_module) côté Supabase plus tard.
-  async function isActiveFallback(phone, module){
-    // fallback : driver only
-    if(module === "DRIVER_PRO"){
-      const { data, error } = await sb.rpc("is_driver_active", { p_phone: phone });
-      if(error) return null;
-      return !!data;
-    }
-    // modules autres : on ne bloque pas (on montre "Activation en cours" si tu veux strict)
-    // Ici: on laisse "true" pour ne pas casser l’expérience tant que RPC universel n’existe pas.
-    return true;
-  }
+    DRIVER_PRO:  "https://beauville.github.io/digiy-driver-pro/pin.html",
+    LOC:         "https://beauville.github.io/digiy-loc-pro/pin.html",
+    MARKET:      "https://beauville.github.io/digiy-market-pro/pin.html",
+    BUILD:       "https://beauville.github.io/digiy-build-pro/pin.html",
+    JOBS:        "https://beauville.github.io/digiy-jobs-pro/pin.html",
+    EXPLORER:    "https://beauville.github.io/digiy-explore/pin.html"
+  };
 
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -177,82 +158,67 @@ h1{font-size:14px;letter-spacing:.14em}
   const quick  = document.getElementById("quick");
 
   // =========================
-  // Helpers phone
+  // Helpers phone + slug
   // =========================
-  function normPhone(p){
-    p = String(p||"").trim().replace(/\s+/g,"").replace(/[^\d+]/g,"");
-    if(p.startsWith("00221")) p = "+221" + p.slice(5);
-    if(!p.startsWith("+") && p.startsWith("221")) p = "+" + p;
-    if(!p.startsWith("+221") && /^\d{9}$/.test(p)) p = "+221" + p;
-    return p;
+  function getPhone(){
+    return localStorage.getItem("digiy_phone") || null;
   }
 
-  function getPhone(){
-    const s = sessionStorage.getItem("digiy_driver_phone");
-    if (s) return normPhone(s);
-
-    const g = localStorage.getItem("digiy_phone");
-    if (g) return normPhone(g);
-
-    try{
-      const a = JSON.parse(localStorage.getItem("digiy_driver_access_pin")||"null");
-      if(a && a.phone) return normPhone(a.phone);
-    }catch(_){}
-
-    return null;
+  function getSlug(){
+    return localStorage.getItem("digiy_slug") || null;
   }
 
   function goInscription(module){
     const u = new URL(ENTRY_URL);
-    if(module) u.searchParams.set("module", String(module));
-    u.searchParams.set("from", location.href);
+    if(module) u.searchParams.set("module", module);
     location.href = u.toString();
   }
 
   function clearSession(){
-    // on vide ce qui crée des boucles
-    sessionStorage.removeItem("digiy_driver_phone");
     localStorage.removeItem("digiy_phone");
-    localStorage.removeItem("digiy_driver_access_pin");
-    // pro connu (si tu veux tout reset)
-    localStorage.removeItem("digiy_known_pro");
+    localStorage.removeItem("digiy_slug");
+    localStorage.removeItem("DIGIY_LOC_PRO_SESSION");
   }
 
-  function addCard(title, right, sub, onClick){
+  function addCard(title, sub, url){
     const btn = document.createElement("div");
     btn.className = "btn";
     btn.innerHTML = `
       <div>
         <div style="font-size:14px">${title}</div>
-        <div style="font-size:12px;opacity:.75;margin-top:4px">${sub||""}</div>
+        <div style="font-size:12px;opacity:.75;margin-top:4px">${sub}</div>
       </div>
-      <span class="tag">${right||"ouvrir"}</span>
+      <span class="tag">ENTRER</span>
     `;
-    btn.onclick = onClick;
+
+    btn.onclick = ()=>{
+      const slug = getSlug();
+      if(!slug){
+        alert("❌ Aucun slug détecté. Passe par l’inscription.");
+        return;
+      }
+
+      // ✅ REDIRECTION VERS pin.html DU MODULE
+      location.href = url + "?slug=" + encodeURIComponent(slug);
+    };
+
     grid.appendChild(btn);
   }
 
-  function badgeHtml(text){
-    return `<span class="badge">${text}</span>`;
-  }
-
   // =========================
-  // Start
+  // START
   // =========================
   const phone = getPhone();
+  const slug  = getSlug();
 
-  if(!phone){
-    status.innerHTML = "<span class='err'>Aucun téléphone détecté</span>";
-    mini.innerHTML = "Passe par l’inscription (porte unique) pour créer ton accès PRO.";
-    grid.innerHTML = "";
-    addCard("📝 Aller à l’inscription DIGIY", "ouvrir", "Choisir module + tarifs + Wave", ()=>goInscription(""));
+  if(!phone || !slug){
+    status.innerHTML = "<span class='err'>Aucun accès détecté</span>";
+    mini.innerHTML = "Passe par l’inscription DIGIY pour créer ton espace PRO.";
+    addCard("📝 Aller à l’inscription", "Créer ton accès + paiement Wave", ENTRY_URL);
     return;
   }
 
-  // pro connu
-  try{ localStorage.setItem("digiy_known_pro","1"); }catch(_){}
-
-  document.getElementById("subtitle").textContent = `JB BEAUVILLE • ${phone}`;
+  document.getElementById("subtitle").textContent = `${phone} • ${slug}`;
   quick.style.display = "flex";
 
   document.getElementById("btnInscription").onclick = ()=>goInscription("");
@@ -263,62 +229,23 @@ h1{font-size:14px;letter-spacing:.14em}
     location.reload();
   };
 
-  status.innerHTML = "<span class='ok'>Accès PRO détecté</span>";
-  mini.innerHTML = `Téléphone : <b>${phone}</b><br>Choisis ton module 👑`;
-
-  // =========================
-  // Modules affichés
-  // (tu peux changer la liste selon ce que tu veux montrer)
-  // =========================
-  const modulesToShow = [
-  { code:"DRIVER_PRO",  label:"🚗 DRIVER PRO",   hint:"Chauffeur — 0% commission" },
-  { code:"LOC",         label:"🏠 LOC",          hint:"Locations — paiement direct" },
-  { code:"RESTO",       label:"🍽️ RESTO",        hint:"Restaurant & caisse" },
-  { code:"RESA",        label:"📅 RÉSA",         hint:"Réservations (tables / services)" },
-  { code:"MARKET",      label:"🛒 MARKET",       hint:"Boutique & stock" },
-  { code:"BUILD",       label:"🏗️ BUILD",        hint:"Artisans & devis" },
-  { code:"POS",         label:"💳 POS",          hint:"Caisse boutique" },
-  { code:"JOBS",        label:"💼 JOBS",         hint:"Emploi & recrutement" },
-  { code:"EXPLORER",    label:"🧭 EXPLORER",     hint:"Activités & découvertes" },
-  { code:"FRET",        label:"📦 FRET PRO",     hint:"Transporteur / livreur" },
-  { code:"FRET_CLIENT", label:"📦 FRET CLIENT",  hint:"Envoyer une marchandise" }
-];
+  status.innerHTML = "<span class='ok'>Cockpit prêt</span>";
+  mini.innerHTML = "Choisis ton module actif 👑";
 
   grid.innerHTML = "";
 
-  for(const m of modulesToShow){
-    // check actif (fallback driver only)
-    const ok = await isActiveFallback(phone, m.code);
-
-    if(ok === null){
-      addCard(
-        `${m.label} ${badgeHtml("vérif indispo")}`,
-        "ouvrir",
-        m.hint,
-        ()=>location.href = (MODULES_URL[m.code] || "#")
-      );
-      continue;
-    }
-
-    if(ok === false){
-      addCard(
-        `${m.label} ${badgeHtml("activation en cours")}`,
-        "voir",
-        "Ton paiement est en traitement. Dès activation, accès direct.",
-        ()=>goInscription(m.code)
-      );
-      continue;
-    }
-
-    addCard(
-      `${m.label} ${badgeHtml("actif")}`,
-      "ouvrir",
-      m.hint,
-      ()=>location.href = (MODULES_URL[m.code] || "#")
-    );
-  }
+  // =========================
+  // MODULES
+  // =========================
+  addCard("🚗 DRIVER PRO", "Chauffeur — cockpit direct", MODULES_URL.DRIVER_PRO);
+  addCard("🏠 LOC PRO", "Hébergement — planning + pulse", MODULES_URL.LOC);
+  addCard("🛒 MARKET PRO", "Boutique — caisse + QR", MODULES_URL.MARKET);
+  addCard("🏗️ BUILD PRO", "Artisans — devis terrain", MODULES_URL.BUILD);
+  addCard("💼 JOBS PRO", "Emploi — accompagnement", MODULES_URL.JOBS);
+  addCard("🧭 EXPLORE PRO", "Tourisme — spots + boost", MODULES_URL.EXPLORER);
 
 })();
 </script>
+
 </body>
 </html>
