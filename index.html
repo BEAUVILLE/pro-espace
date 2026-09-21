@@ -46,7 +46,9 @@ const SUPABASE_URL='https://wesqmwjjtsefyjnluosj.supabase.co';
 const SUPABASE_KEY='sb_publishable_tGHItRgeWDmGjnd0CK1DVQ_BIep4Ug3';
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,detectSessionInUrl:true}});
 const $=id=>document.getElementById(id);
-const requested=(new URLSearchParams(location.search).get('site')||'').trim();
+const params=new URLSearchParams(location.search);
+const requested=(params.get('site')||'').trim();
+const requestedModule=(params.get('module')||'').trim().toLowerCase();
 let loading=false;
 
 function msg(el,text,bad=false){el.textContent=text||'';el.classList.toggle('bad',!!bad)}
@@ -76,7 +78,8 @@ function showLogin(){
   $('ownerCard').classList.add('hidden');
   $('loginCard').classList.remove('hidden');
 }
-function siteUrl(slug){return './loc.html?site='+encodeURIComponent(slug)}
+function locUrl(slug){return './loc.html?site='+encodeURIComponent(slug)}
+function driverUrl(slug){return './driver.html?site='+encodeURIComponent(slug)}
 async function loadOwner(session){
   if(!session||loading)return;
   loading=true;
@@ -85,22 +88,32 @@ async function loadOwner(session){
     $('ownerCard').classList.remove('hidden');
     $('sessionEmail').textContent='Connecté : '+(session.user.email||'propriétaire');
     msg($('ownerStatus'),'Chargement de vos fiches…');
-    const {data,error}=await db.from('digiy_loc_master_sites')
-      .select('slug,display_name')
-      .order('display_name');
-    if(error){msg($('ownerStatus'),'Impossible de charger vos fiches.',true);return}
-    const sites=data||[];
-    if(requested && sites.some(s=>s.slug===requested)){
-      location.replace(siteUrl(requested));
+
+    const [locRes,driverRes]=await Promise.all([
+      db.from('digiy_loc_master_sites').select('slug,display_name').order('display_name'),
+      db.from('digiy_driver_master_members').select('slug,display_name').eq('is_active',true).order('display_name')
+    ]);
+    if(locRes.error||driverRes.error){
+      console.warn('[DIGIY OWNER LOAD]',locRes.error,driverRes.error);
+      msg($('ownerStatus'),'Impossible de charger toutes vos fiches.',true);
       return;
     }
+
+    const locs=(locRes.data||[]).map(s=>({module:'loc',slug:s.slug,label:s.display_name||s.slug,detail:'Calendrier · réservations · tarifs',url:locUrl(s.slug)}));
+    const drivers=(driverRes.data||[]).map(s=>({module:'driver',slug:s.slug,label:s.display_name||s.slug,detail:'Courses · disponibilité · profil chauffeur',url:driverUrl(s.slug)}));
+    const sites=[...locs,...drivers];
+
+    if(requested){
+      const target=sites.find(s=>s.slug===requested&&(!requestedModule||s.module===requestedModule));
+      if(target){location.replace(target.url);return}
+    }
+
     const grid=$('sitesGrid'); grid.innerHTML='';
     sites.forEach(site=>{
       const a=document.createElement('a');
       a.className='site';
-      a.href=siteUrl(site.slug);
-      const label=site.display_name||site.slug;
-      a.innerHTML='<span><strong>'+escapeHtml(label)+'</strong><small>Calendrier · réservations · tarifs</small></span><span class="arrow">→</span>';
+      a.href=site.url;
+      a.innerHTML='<span><strong>'+escapeHtml(site.label)+'</strong><small>'+escapeHtml(site.detail)+'</small></span><span class="arrow">→</span>';
       grid.appendChild(a);
     });
     msg($('ownerStatus'),sites.length?sites.length+' fiche'+(sites.length>1?'s':'')+' disponible'+(sites.length>1?'s':'')+'.':'Aucune fiche propriétaire rattachée à ce compte.',!sites.length);
