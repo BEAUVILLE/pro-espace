@@ -55,7 +55,10 @@ function friendly(error){
   if((error&&error.status===429)||/rate.?limit|too many|over_email_send_rate_limit/.test(raw)){
     return 'Trop de demandes de connexion. Réessayez dans environ une heure.';
   }
-  if(/user not found|signups not allowed|invalid login/.test(raw)){
+  if((error&&error.code==='otp_disabled')||/signups not allowed for otp|otp.*disabled/.test(raw)){
+    return 'La connexion par code email est désactivée dans Supabase. Activez OTP/Magic Link dans Auth > Providers > Email.';
+  }
+  if(/user not found|invalid login/.test(raw)){
     return 'Cette adresse email n’est pas autorisée pour un espace propriétaire.';
   }
   if(/smtp|email|mail|sending|mailer/.test(raw)){
