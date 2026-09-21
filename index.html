@@ -21,7 +21,7 @@
     <div class="field"><label for="email">Email propriétaire</label><input id="email" type="email" autocomplete="email" placeholder="votre@email.com"></div>
     <button class="btn primary" id="sendCode" type="button">Recevoir mon code →</button>
     <div id="otpBlock" class="hidden">
-      <div class="field"><label for="otp">Code reçu par email</label><input id="otp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="6 chiffres"></div>
+      <div class="field"><label for="otp">Code reçu par email</label><input id="otp" inputmode="numeric" autocomplete="one-time-code" maxlength="10" pattern="[0-9]{6,10}" placeholder="Code reçu"></div>
       <button class="btn dark" id="verifyCode" type="button">Ouvrir mon espace →</button>
     </div>
     <p class="status" id="loginStatus" aria-live="polite"></p>
@@ -115,11 +115,11 @@ async function sendCode(){
   $('sendCode').disabled=false;
   if(error){console.warn('[DIGIY OWNER AUTH]',error);return msg($('loginStatus'),friendly(error)+'\n'+diagnostic(error),true)}
   $('otpBlock').classList.remove('hidden');
-  msg($('loginStatus'),'Email envoyé. Entrez les 6 chiffres reçus.');
+  msg($('loginStatus'),'Email envoyé. Entrez le code reçu.');
 }
 async function verifyCode(){
   const email=$('email').value.trim(),token=$('otp').value.trim();
-  if(!email||!/^[0-9]{6}$/.test(token))return msg($('loginStatus'),'Entrez le code à 6 chiffres reçu par email.',true);
+  if(!email||!/^[0-9]{6,10}$/.test(token))return msg($('loginStatus'),'Entrez le code numérique reçu par email.',true);
   $('verifyCode').disabled=true;
   const {data,error}=await db.auth.verifyOtp({email,token,type:'email'});
   $('verifyCode').disabled=false;
