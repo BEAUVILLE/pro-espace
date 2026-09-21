@@ -23,6 +23,7 @@
 <section class="panel hidden" id="managerPanel">
 <span class="eyebrow">Calendrier propriétaire</span><h2 id="siteTitle">Mon hébergement</h2><p class="muted">1 clic = un jour. Un second clic = une période. Ensuite choisissez l’état ou le tarif.</p>
 <div class="sessionbar"><span id="sessionEmail"></span><button id="logout" type="button">Déconnexion</button></div>
+<div class="pricing"><div class="pricing-title">✨ Aide-moi à communiquer</div><p class="pricing-note">Une disponibilité, une offre, une nouveauté : DIGIY prépare le texte, vous gardez la main.</p><a class="btn dark" id="assistLink" href="./assist.html?module=loc" style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none;margin-top:10px">✨ Ouvrir DIGIY ASSIST</a></div>
 <div class="field hidden" id="unitField"><label for="unitSelect">Hébergement / chambre</label><select id="unitSelect"></select></div>
 <div class="pricing"><div class="pricing-title">💶 Tarif de base</div><p class="pricing-note">S’applique automatiquement s’il n’existe aucun prix spécial.</p><div class="price-grid"><div class="field"><label for="basePrice">Tarif de base / nuitée</label><input id="basePrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="78"></div><button class="btn dark" id="saveBasePrice" type="button">Enregistrer le tarif de base</button></div><div class="price-current" id="basePriceInfo"></div></div>
 <div class="calendar"><div class="nav"><button id="prev" type="button">‹</button><span class="month" id="monthLabel"></span><button id="next" type="button">›</button></div><div class="grid" id="calendarGrid"></div><div class="legend"><span><i class="dot free"></i>Disponible</span><span><i class="dot occ"></i>Occupé</span><span><i class="dot close"></i>Fermé</span></div></div>
@@ -58,6 +59,7 @@ const SUPABASE_KEY='sb_publishable_tGHItRgeWDmGjnd0CK1DVQ_BIep4Ug3';
 const SITE_SLUG=(new URLSearchParams(location.search).get('site')||'').trim(); if(!SITE_SLUG){location.replace('./');return;}
 const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,detectSessionInUrl:true}});
 const $=id=>document.getElementById(id);
+const assistLink=$('assistLink');if(assistLink)assistLink.href='./assist.html?module=loc&site='+encodeURIComponent(SITE_SLUG);
 const loginPanel=$('loginPanel'),managerPanel=$('managerPanel'),loginStatus=$('loginStatus'),saveStatus=$('saveStatus');
 let units=[],unitId=null,current=new Date(),states=new Map(),prices=new Map(),reservations=[],basePrice=78,currency='EUR',start=null,end=null;
 current=new Date(current.getFullYear(),current.getMonth(),1,12);
