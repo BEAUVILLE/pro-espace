@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#25190f">
+<title>Gestion calendrier — DIGIYLYFE</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#25190f;background:linear-gradient(180deg,#fffaf1,#ead4ad);min-height:100vh}button,input,select,textarea{font:inherit}.wrap{width:min(760px,calc(100% - 24px));margin:auto;padding:18px 0 42px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}.brand{font-weight:1000;letter-spacing:.04em}.brand small{display:block;color:#6e5845;font-size:11px;margin-top:3px}.back{color:#25190f;text-decoration:none;padding:9px 13px;border-radius:999px;background:#fff;border:1px solid #d8c8b6;font-weight:900;font-size:12px}.panel{background:#ffffffdf;border:1px solid #d8c8b6;border-radius:26px;padding:clamp(18px,4vw,30px);box-shadow:0 16px 42px rgba(61,43,22,.12);margin-top:12px}.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.12em;font-weight:1000;color:#315b43}h1,h2{font-family:Georgia,"Times New Roman",serif;margin:8px 0 6px;line-height:1}h1{font-size:clamp(32px,7vw,52px)}h2{font-size:30px}.muted{color:#6e5845;font-weight:700;line-height:1.5}.field{display:grid;gap:6px;margin-top:14px}.field label{font-size:11px;font-weight:1000;text-transform:uppercase;color:#6e5845}.field input,.field select{min-height:50px;border:1px solid #cdbba8;border-radius:14px;padding:12px;background:#fff}.btn{border:0;border-radius:999px;min-height:46px;padding:11px 17px;font-weight:1000;cursor:pointer}.primary{background:linear-gradient(135deg,#fff0b8,#c99743,#70a77c);color:#21150c}.dark{background:#315b43;color:#fff}.ghost{background:#fff;border:1px solid #cdbba8;color:#25190f}.status{min-height:20px;margin-top:10px;font-size:12px;font-weight:900;color:#315b43}.error{color:#a32626}.hidden{display:none!important}.sessionbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 12px;border-radius:15px;background:#315b4312;margin-top:12px;font-size:12px;font-weight:850}.sessionbar button{border:0;background:#fff;border-radius:999px;padding:7px 11px;font-weight:900;cursor:pointer}.pricing{margin-top:14px;padding:14px;border:1px solid #d8c8b6;border-radius:18px;background:#fffaf1}.pricing-title{font-weight:1000;font-size:15px}.pricing-note{margin:5px 0 0;color:#6e5845;font-size:12px;font-weight:750;line-height:1.45}.price-grid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:end}.price-current{margin-top:8px;font-size:12px;font-weight:950;color:#315b43}.calendar{margin-top:16px;border:1px solid #d8c8b6;border-radius:20px;padding:13px;background:#fff}.nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}.nav button{border:1px solid #d8c8b6;background:#f7f2ea;border-radius:999px;padding:7px 13px;font-weight:1000;cursor:pointer}.month{font-weight:1000;text-transform:capitalize}.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.dow{text-align:center;color:#7b6754;font-size:10px;font-weight:1000;padding:5px 0}.day{aspect-ratio:1/1;border:1px solid transparent;border-radius:12px;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-weight:900;cursor:pointer;position:relative;color:#25190f}.day:hover:not(:disabled){border-color:#c99743}.day:disabled{opacity:.28;cursor:not-allowed}.day.occupied{background:#fbe1df;color:#9d211c;border-color:#efb3af}.day.closed{background:#35302d;color:#fff;border-color:#35302d}.day.selected{outline:3px solid #c99743;outline-offset:1px}.day.today::after{content:"";position:absolute;bottom:4px;width:5px;height:5px;border-radius:50%;background:#315b43}.day-price{font-size:9px;font-weight:1000;opacity:.82;white-space:nowrap}.legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;font-size:11px;font-weight:850;color:#6e5845}.dot{display:inline-block;width:11px;height:11px;border-radius:4px;vertical-align:-1px;margin-right:4px;border:1px solid #cdbba8}.dot.free{background:#fff}.dot.occ{background:#fbe1df}.dot.close{background:#35302d}.selection{margin-top:14px;padding:12px 14px;border-radius:15px;background:#f7e9d5;font-weight:900}.state-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}.state-actions button{border:0;border-radius:15px;padding:13px 7px;font-weight:1000;cursor:pointer}.freeBtn{background:#e3f1e7;color:#245035}.occBtn{background:#fbe1df;color:#9d211c}.closeBtn{background:#35302d;color:#fff}.price-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.reservation-box{margin-top:16px;padding:15px;border:1px solid #d8c8b6;border-radius:18px;background:#fff}.reservation-box h3{margin:0 0 5px;font-size:18px}.reservation-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.reservation-grid .wide{grid-column:1/-1}.reservation-box textarea{width:100%;min-height:82px;resize:vertical;border:1px solid #cdbba8;border-radius:14px;padding:12px;font:inherit}.reservation-list{display:grid;gap:9px;margin-top:12px}.reservation-card{padding:12px;border:1px solid #e1d2c2;border-radius:15px;background:#fffaf1}.reservation-card strong{display:block;font-size:15px}.reservation-meta{margin-top:4px;color:#6e5845;font-size:12px;font-weight:750;line-height:1.45}.reservation-note{margin-top:6px;font-size:12px;line-height:1.45;color:#4d3b2e}.reservation-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.reservation-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:7px 11px;border-radius:999px;text-decoration:none;font-size:12px;font-weight:950}.sms-action{background:#e7f1ff;color:#174b86}.wa-action{background:#def7e9;color:#17633e}.guest-mark{font-size:9px;line-height:1}.empty-reservations{color:#6e5845;font-size:12px;font-weight:750;padding:9px 0}.reservation-carnet{border:2px solid #315b4355;background:linear-gradient(145deg,#ffffff,#f7f2ea)}.reservation-carnet-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap}.reservation-carnet-head h3{margin:0}.reservation-count{margin-top:8px;font-size:12px;font-weight:1000;color:#315b43}.reservation-card{box-shadow:0 7px 18px rgba(61,43,22,.06)}.reservation-card.history{opacity:.78}.reservation-card-head{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.reservation-badge{display:inline-flex;padding:4px 8px;border-radius:999px;background:#e3f1e7;color:#245035;font-size:10px;font-weight:1000}.reservation-card.history .reservation-badge{background:#eee7df;color:#6e5845}.reservation-note{padding:8px 10px;border-radius:11px;background:#fff;border-left:4px solid #c99743;font-weight:800}.carnet-refresh{min-height:36px;padding:7px 11px;font-size:11px}/* DIGIY SARLAT RESERVATION CARNET V2 */ /* DIGIY SARLAT PRIVATE RESERVATIONS V1 */@media(max-width:560px){.reservation-grid{grid-template-columns:1fr}.reservation-grid .wide{grid-column:auto}.price-grid{grid-template-columns:1fr}.state-actions{grid-template-columns:1fr}.panel{border-radius:20px}.day{border-radius:9px;font-size:12px}.wrap{width:min(100% - 16px,760px)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top"><div class="brand">DIGIYLYFE · MASTER LOC<small>Gestion propriétaire centralisée</small></div><a class="back" href="./">← Mes fiches</a></header>
+<section class="panel hidden" id="loginPanel">
+<span class="eyebrow">Accès privé</span><h1>Gérer mes dates.</h1><p class="muted">Connectez-vous pour gérer Libre / Occupé / Fermé et vos tarifs.</p>
+<div class="field"><label for="email">Email propriétaire</label><input id="email" type="email" autocomplete="email" placeholder="votre@email.com"></div>
+<button class="btn primary" id="sendCode" type="button">Recevoir mon code →</button>
+<div id="otpBlock" class="hidden"><div class="field"><label for="otp">Code reçu par email</label><input id="otp" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="6 chiffres"></div><button class="btn dark" id="verifyCode" type="button">Ouvrir ma gestion →</button></div>
+<p class="status" id="loginStatus" aria-live="polite"></p>
+</section>
+<section class="panel hidden" id="managerPanel">
+<span class="eyebrow">Calendrier propriétaire</span><h2 id="siteTitle">Mon hébergement</h2><p class="muted">1 clic = un jour. Un second clic = une période. Ensuite choisissez l’état ou le tarif.</p>
+<div class="sessionbar"><span id="sessionEmail"></span><button id="logout" type="button">Déconnexion</button></div>
+<div class="field hidden" id="unitField"><label for="unitSelect">Hébergement / chambre</label><select id="unitSelect"></select></div>
+<div class="pricing"><div class="pricing-title">💶 Tarif de base</div><p class="pricing-note">S’applique automatiquement s’il n’existe aucun prix spécial.</p><div class="price-grid"><div class="field"><label for="basePrice">Tarif de base / nuitée</label><input id="basePrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="78"></div><button class="btn dark" id="saveBasePrice" type="button">Enregistrer le tarif de base</button></div><div class="price-current" id="basePriceInfo"></div></div>
+<div class="calendar"><div class="nav"><button id="prev" type="button">‹</button><span class="month" id="monthLabel"></span><button id="next" type="button">›</button></div><div class="grid" id="calendarGrid"></div><div class="legend"><span><i class="dot free"></i>Disponible</span><span><i class="dot occ"></i>Occupé</span><span><i class="dot close"></i>Fermé</span></div></div>
+<div class="selection" id="selectionLabel">Sélection : aucune date</div>
+<div class="state-actions"><button class="freeBtn" id="makeAvailable" type="button">🟢 Disponible</button><button class="occBtn" id="makeOccupied" type="button">🔴 Occupé</button><button class="closeBtn" id="makeClosed" type="button">⚫ Fermé</button></div>
+<div class="reservation-box reservation-carnet" id="reservationCarnet">
+<div class="reservation-carnet-head"><div><h3>📒 Carnet des réservations</h3><p class="pricing-note">Vos fiches client et vos notes privées, à venir comme passées.</p></div><button class="btn ghost carnet-refresh" id="refreshReservations" type="button">↻ Rafraîchir</button></div>
+<div class="reservation-count" id="reservationCount">Chargement du carnet…</div>
+<div class="reservation-list" id="reservationList"></div>
+</div>
+<div class="pricing"><div class="pricing-title">🏷️ Prix de la sélection</div><p class="pricing-note">1 date = prix du jour · plusieurs dates = prix de la période.</p><div class="price-grid"><div class="field"><label for="specialPrice">Prix spécial / nuitée</label><input id="specialPrice" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Ex. 95"></div><button class="btn primary" id="applySpecialPrice" type="button">Appliquer ce prix</button></div><div class="price-actions"><button class="btn ghost" id="clearSpecialPrice" type="button">↩ Revenir au tarif de base</button></div></div>
+<div class="reservation-box">
+<h3>👤 Réservation privée</h3>
+<p class="pricing-note">Sélectionnez la ou les dates dans le calendrier, puis rattachez le client. Ces informations restent uniquement dans votre accès propriétaire.</p>
+<div class="reservation-grid">
+<div class="field"><label for="guestName">Nom du client</label><input id="guestName" type="text" autocomplete="name" placeholder="Nom et prénom"></div>
+<div class="field"><label for="guestPhone">Téléphone</label><input id="guestPhone" type="tel" autocomplete="tel" placeholder="+33… / +221…"></div>
+<div class="field"><label for="reservationSource">Provenance</label><select id="reservationSource"><option value="Booking.com">Booking.com</option><option value="Airbnb">Airbnb</option><option value="WhatsApp">WhatsApp</option><option value="Direct">Direct</option><option value="Autre">Autre</option></select></div>
+<div class="field"><label>Dates</label><input id="reservationDates" type="text" readonly placeholder="Sélectionnez dans le calendrier"></div>
+<div class="field wide"><label for="reservationNote">Note privée · facultatif</label><textarea id="reservationNote" placeholder="Heure d’arrivée, demande particulière, référence…"></textarea></div>
+</div>
+<button class="btn dark" id="saveReservation" type="button" style="margin-top:10px">🔒 Enregistrer la réservation</button>
+</div>
+<p class="status" id="saveStatus" aria-live="polite"></p>
+</section>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(()=>{
+'use strict';
+const SUPABASE_URL='https://wesqmwjjtsefyjnluosj.supabase.co';
+const SUPABASE_KEY='sb_publishable_tGHItRgeWDmGjnd0CK1DVQ_BIep4Ug3';
+const SITE_SLUG=(new URLSearchParams(location.search).get('site')||'').trim(); if(!SITE_SLUG){location.replace('./');return;}
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,detectSessionInUrl:true}});
+const $=id=>document.getElementById(id);
+const loginPanel=$('loginPanel'),managerPanel=$('managerPanel'),loginStatus=$('loginStatus'),saveStatus=$('saveStatus');
+let units=[],unitId=null,current=new Date(),states=new Map(),prices=new Map(),reservations=[],basePrice=78,currency='EUR',start=null,end=null;
+current=new Date(current.getFullYear(),current.getMonth(),1,12);
+const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const parse=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d,12)};
+const today=()=>{const n=new Date();return new Date(n.getFullYear(),n.getMonth(),n.getDate(),12)};
+const fmt=d=>d.toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+const between=(a,b)=>{const out=[];for(let d=new Date(a);d<=b;d.setDate(d.getDate()+1))out.push(iso(d));return out};
+const selectedDates=()=>start?between(start,end||start):[];
+const money=v=>{const n=Number(v);return Number.isFinite(n)?n.toLocaleString('fr-FR',{maximumFractionDigits:2})+' '+(currency==='EUR'?'€':currency):'—'};
+function msg(el,text,bad=false){el.textContent=text||'';el.classList.toggle('error',bad)}
+function showManager(email){loginPanel.classList.add('hidden');managerPanel.classList.remove('hidden');$('sessionEmail').textContent='Connecté : '+email}
+function showLogin(){location.replace('./?site='+encodeURIComponent(SITE_SLUG))}
+function currentUnit(){return units.find(u=>u.id===unitId)||null}
+function syncBase(){const u=currentUnit();basePrice=Number(u&&u.base_price!=null?u.base_price:78);currency=(u&&u.price_currency)||'EUR';$('basePrice').value=basePrice;$('basePriceInfo').textContent='Tarif de base actuel : '+money(basePrice)}
+async function sendCode(){const email=$('email').value.trim();if(!email)return msg(loginStatus,'⚠️ Indiquez votre email.',true);$('sendCode').disabled=true;msg(loginStatus,'Envoi du code…');const{error}=await db.auth.signInWithOtp({email,options:{shouldCreateUser:false}});$('sendCode').disabled=false;if(error)return msg(loginStatus,'⚠️ '+error.message,true);$('otpBlock').classList.remove('hidden');msg(loginStatus,'✓ Email envoyé. Entrez les 6 chiffres reçus.')}
+async function verifyCode(){const email=$('email').value.trim(),token=$('otp').value.trim();if(!email||!/^\d{6}$/.test(token))return msg(loginStatus,'⚠️ Entrez le code à 6 chiffres reçu par email.',true);$('verifyCode').disabled=true;const{data,error}=await db.auth.verifyOtp({email,token,type:'email'});$('verifyCode').disabled=false;if(error)return msg(loginStatus,'⚠️ Code invalide ou expiré.',true);await enter(data.session)}
+async function enter(session){if(!session)return showLogin();const{data:site,error}=await db.from('digiy_loc_master_sites').select('id,slug,display_name').eq('slug',SITE_SLUG).maybeSingle();if(error||!site){location.replace('./');return} $('siteTitle').textContent=site.display_name||site.slug; document.title='Gestion — '+(site.display_name||site.slug);const{data,error:unitError}=await db.from('digiy_loc_master_units').select('id,slug,display_name,unit_type,sort_order,base_price,price_currency').eq('site_id',site.id).eq('is_active',true).order('sort_order').order('display_name');if(unitError||!data||!data.length){await db.auth.signOut();showLogin();return msg(loginStatus,'⚠️ Aucun hébergement actif.',true)}units=data;unitId=units[0].id;const s=$('unitSelect');s.innerHTML='';units.forEach(u=>{const o=document.createElement('option');o.value=u.id;o.textContent=u.display_name;s.appendChild(o)});s.value=unitId;$('unitField').classList.toggle('hidden',units.length<2);syncBase();showManager(session.user.email||'propriétaire');await loadData();render()}
+// DIGIY OWNER STATE LOAD V3 — les états se relisent indépendamment des tarifs.
+async function loadData(){
+  if(!unitId)return;
+  const from=iso(new Date(today().getFullYear(),today().getMonth(),1,12));
+
+  const stateResult=await db.from('digiy_loc_master_unit_calendar')
+    .select('day,status')
+    .eq('unit_id',unitId)
+    .gte('day',from)
+    .order('day');
+
+  if(stateResult.error){
+    msg(saveStatus,'⚠️ Lecture calendrier impossible : '+stateResult.error.message,true);
+    return;
+  }
+
+  states=new Map((stateResult.data||[]).map(r=>[r.day,r.status]));
+
+  // Les tarifs ne doivent jamais empêcher la restitution de Libre / Occupé / Fermé.
+  const priceResult=await db.from('digiy_loc_master_unit_prices')
+    .select('day,price_override')
+    .eq('unit_id',unitId)
+    .gte('day',from)
+    .order('day');
+
+  if(!priceResult.error){
+    prices=new Map((priceResult.data||[]).map(r=>[r.day,Number(r.price_override)]));
+  }
+
+  await loadReservationCarnet();
+}
+async function loadReservationCarnet(){
+  const count=$('reservationCount');
+  if(count) count.textContent='Chargement du carnet…';
+  if(!unitId){reservations=[];renderReservations();return false;}
+  const {data,error}=await db.rpc('digiy_loc_master_list_reservations_v1',{p_unit_id:unitId});
+  if(error){
+    reservations=[];
+    if(count) count.textContent='⚠️ Carnet indisponible';
+    console.warn('[SARLAT OWNER] Carnet réservations indisponible',error);
+    renderReservations();
+    return false;
+  }
+  reservations=Array.isArray(data)?data:[];
+  renderReservations();
+  return true;
+}
+function updateSelection(){const datesInput=$('reservationDates');if(!start){$('selectionLabel').textContent='Sélection : aucune date';if(datesInput)datesInput.value='';return}const label=end&&iso(end)!==iso(start)?fmt(start)+' → '+fmt(end):fmt(start);$('selectionLabel').textContent='Sélection : '+label;if(datesInput)datesInput.value=label}
+function resetSelection(){start=null;end=null;updateSelection()}
+function choose(date){if(date<today())return;if(!start||end){start=date;end=null}else if(date<start){end=start;start=date}else end=date;updateSelection();render()}
+function render(){const y=current.getFullYear(),m=current.getMonth();$('monthLabel').textContent=current.toLocaleDateString('fr-FR',{month:'long',year:'numeric'});const grid=$('calendarGrid');grid.innerHTML='';['Lu','Ma','Me','Je','Ve','Sa','Di'].forEach(x=>{const e=document.createElement('div');e.className='dow';e.textContent=x;grid.appendChild(e)});const first=new Date(y,m,1,12),offset=(first.getDay()+6)%7,last=new Date(y,m+1,0,12).getDate();for(let i=0;i<offset;i++)grid.appendChild(document.createElement('div'));const sel=new Set(selectedDates());for(let d=1;d<=last;d++){const date=new Date(y,m,d,12),key=iso(date),b=document.createElement('button');b.type='button';b.className='day';b.dataset.date=key;const shown=prices.has(key)?prices.get(key):basePrice;const booking=reservations.find(r=>key>=r.start_day&&key<=r.end_day);b.innerHTML='<span>'+d+'</span><small class="day-price">'+money(shown)+'</small>'+(booking?'<small class="guest-mark">👤</small>':'');if(booking)b.title=booking.guest_name+' · '+booking.guest_phone;if(date<today())b.disabled=true;const state=states.get(key);if(state)b.classList.add(state);if(sel.has(key))b.classList.add('selected');if(key===iso(today()))b.classList.add('today');b.addEventListener('click',()=>choose(date));grid.appendChild(b)}}
+function reservationMessage(r){
+  const dates=r.start_day===r.end_day?r.start_day:(r.start_day+' au '+r.end_day);
+  return 'Bonjour '+r.guest_name+', concernant votre séjour Chez Baptiste Sarlat du '+dates+', je vous contacte pour vous transmettre des informations complémentaires.';
+}
+function renderReservations(){
+  const box=$('reservationList'),count=$('reservationCount');if(!box)return;
+  box.innerHTML='';
+  if(count) count.textContent=reservations.length+' fiche'+(reservations.length===1?'':'s')+' enregistrée'+(reservations.length===1?'':'s');
+  if(!reservations.length){const empty=document.createElement('div');empty.className='empty-reservations';empty.textContent='Aucune fiche client enregistrée.';box.appendChild(empty);return;}
+  const todayKey=iso(today());
+  reservations.forEach(r=>{
+    const upcoming=String(r.end_day)>=todayKey;
+    const card=document.createElement('article');card.className='reservation-card'+(upcoming?'':' history');
+    const head=document.createElement('div');head.className='reservation-card-head';
+    const name=document.createElement('strong');name.textContent='👤 '+r.guest_name;head.appendChild(name);
+    const badge=document.createElement('span');badge.className='reservation-badge';badge.textContent=upcoming?'À venir':'Historique';head.appendChild(badge);
+    card.appendChild(head);
+    const startDate=fmt(parse(r.start_day)),endDate=fmt(parse(r.end_day));
+    const meta=document.createElement('div');meta.className='reservation-meta';meta.textContent=(r.start_day===r.end_day?startDate:startDate+' → '+endDate)+' · '+r.guest_phone+(r.source?' · '+r.source:'');card.appendChild(meta);
+    const note=document.createElement('div');note.className='reservation-note';note.textContent=r.note?'📝 '+r.note:'📝 Aucune note privée';card.appendChild(note);
+    const actions=document.createElement('div');actions.className='reservation-actions';
+    const sms=document.createElement('a');sms.className='sms-action';sms.textContent='📩 SMS';sms.href='sms:'+r.guest_phone+'?body='+encodeURIComponent(reservationMessage(r));actions.appendChild(sms);
+    const digits=String(r.guest_phone||'').replace(/\D/g,'');
+    if(digits){const wa=document.createElement('a');wa.className='wa-action';wa.textContent='💬 WhatsApp';wa.href='https://wa.me/'+digits+'?text='+encodeURIComponent(reservationMessage(r));wa.target='_blank';wa.rel='noopener';actions.appendChild(wa);}
+    card.appendChild(actions);box.appendChild(card);
+  });
+}
+// DIGIY SARLAT PRIVATE RESERVATION VERIFY V2 — même chaîne de vérité que le bouton Occupé.
+async function savePrivateReservation(){
+  const dates=selectedDates();
+  if(!dates.length)return msg(saveStatus,'⚠️ Sélectionnez d’abord une date ou une période.',true);
+  const guestName=$('guestName').value.trim(),guestPhone=$('guestPhone').value.trim();
+  if(!guestName)return msg(saveStatus,'⚠️ Indiquez le nom du client.',true);
+  if(!guestPhone)return msg(saveStatus,'⚠️ Indiquez le téléphone du client.',true);
+  const button=$('saveReservation');button.disabled=true;msg(saveStatus,'Enregistrement et vérification…');
+  try{
+    const {data,error}=await db.rpc('digiy_loc_master_save_reservation_v1',{
+      p_unit_id:unitId,p_start_day:dates[0],p_end_day:dates[dates.length-1],p_guest_name:guestName,p_guest_phone:guestPhone,p_source:$('reservationSource').value,p_note:$('reservationNote').value.trim()||null
+    });
+    if(error)return msg(saveStatus,'⚠️ Réservation non enregistrée : '+error.message,true);
+    if(!data||!data.length)return msg(saveStatus,'⚠️ Réservation non retrouvée après écriture.',true);
+
+    // Vérification réelle du statut Occupé dans la table calendrier.
+    const {data:verifyRows,error:verifyError}=await db.from('digiy_loc_master_unit_calendar')
+      .select('day,status')
+      .eq('unit_id',unitId)
+      .in('day',dates);
+    if(verifyError)return msg(saveStatus,'⚠️ Réservation créée mais relecture calendrier impossible : '+verifyError.message,true);
+    const verifyMap=new Map((verifyRows||[]).map(row=>[String(row.day),row.status]));
+    if(!dates.every(day=>verifyMap.get(day)==='occupied')){
+      return msg(saveStatus,'⚠️ Réservation créée mais les dates ne sont pas confirmées Occupé. Aucun faux succès affiché.',true);
+    }
+
+    // Mettre à jour l’écran proprio immédiatement depuis la vérité confirmée.
+    dates.forEach(day=>states.set(day,'occupied'));
+
+    // Recharger le carnet propriétaire complet, notes incluses.
+    await loadReservationCarnet();
+
+    resetSelection();render();renderReservations();
+    $('guestName').value='';$('guestPhone').value='';$('reservationNote').value='';
+
+    // Même notification que la route rouge Occupé : fiche publique déjà ouverte = relecture immédiate.
+    const syncPayload={type:'calendar-changed',unitId,dates,status:'occupied',ts:Date.now()};
+    try{const channel=new BroadcastChannel('digiy-loc-'+SITE_SLUG);channel.postMessage(syncPayload);channel.close();}catch(_){ }
+    try{localStorage.setItem('digiy-loc-'+SITE_SLUG+'-sync',JSON.stringify(syncPayload));}catch(_){ }
+
+    msg(saveStatus,'✓ Réservation privée enregistrée · Occupé confirmé en base et synchronisation publique déclenchée.');
+  }finally{button.disabled=false;}
+}
+// DIGIY OWNER STATE VERIFY V1 — la base reste la seule mémoire de vérité.
+async function applyState(status){
+  const dates=selectedDates();
+  if(!dates.length)return msg(saveStatus,'⚠️ Sélectionnez une date ou une période.',true);
+  if(!unitId)return msg(saveStatus,'⚠️ Aucun hébergement sélectionné.',true);
+
+  const buttons=[$('makeAvailable'),$('makeOccupied'),$('makeClosed')].filter(Boolean);
+  buttons.forEach(button=>button.disabled=true);
+  msg(saveStatus,'Enregistrement et vérification…');
+
+  try{
+    const {data,error}=await db.rpc('digiy_loc_set_unit_calendar_state_v2',{
+      p_unit_id:unitId,
+      p_days:dates,
+      p_status:status
+    });
+    if(error)return msg(saveStatus,'⚠️ État refusé : '+error.message,true);
+
+    const rows=Array.isArray(data)?data:[];
+    const returnedDays=new Set(rows.map(row=>String(row.day)));
+    if(rows.length!==dates.length || dates.some(day=>!returnedDays.has(day))){
+      return msg(saveStatus,'⚠️ La base n’a pas confirmé toute la sélection.',true);
+    }
+
+    // DIGIY OWNER STATE VERIFY V2 — confirmer le statut sans dépendre du chargement des tarifs.
+    const {data:verifyRows,error:verifyError}=await db.from('digiy_loc_master_unit_calendar')
+      .select('day,status')
+      .eq('unit_id',unitId)
+      .in('day',dates);
+    if(verifyError){
+      render();
+      return msg(saveStatus,'⚠️ Relecture du statut impossible : '+verifyError.message,true);
+    }
+
+    const verifyMap=new Map((verifyRows||[]).map(row=>[String(row.day),row.status]));
+    const persisted=status==='available'
+      ? dates.every(day=>!verifyMap.has(day))
+      : dates.every(day=>verifyMap.get(day)===status);
+
+    if(!persisted){
+      render();
+      return msg(saveStatus,'⚠️ État non retrouvé après relecture. Aucun faux succès affiché.',true);
+    }
+
+    // Le statut est confirmé : mettre à jour l’affichage immédiatement.
+    if(status==='available') dates.forEach(day=>states.delete(day));
+    else dates.forEach(day=>states.set(day,status));
+
+    const label=status==='available'?'Disponible':status==='occupied'?'Occupé':'Fermé';
+    resetSelection();
+    render();
+    msg(saveStatus,'✓ '+label+' confirmé en base sur '+dates.length+(dates.length===1?' date.':' dates.'));
+
+    // DIGIY OWNER PUBLIC SYNC V3 — prévenir immédiatement une fiche publique déjà ouverte.
+    const syncPayload={type:'calendar-changed',unitId,dates,status,ts:Date.now()};
+    try{
+      const channel=new BroadcastChannel('digiy-loc-'+SITE_SLUG);
+      channel.postMessage(syncPayload);
+      channel.close();
+    }catch(_){ }
+    try{localStorage.setItem('digiy-loc-'+SITE_SLUG+'-sync',JSON.stringify(syncPayload));}catch(_){ }
+  }finally{
+    buttons.forEach(button=>button.disabled=false);
+  }
+}
+
+let ownerResyncBusy=false;
+async function resyncOwnerCalendar(){
+  if(ownerResyncBusy||!unitId||managerPanel.classList.contains('hidden'))return;
+  ownerResyncBusy=true;
+  try{
+    await loadData();
+    render();
+  }finally{
+    ownerResyncBusy=false;
+  }
+}
+window.addEventListener('focus',resyncOwnerCalendar);
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible')resyncOwnerCalendar();
+});
+async function saveBasePrice(){const value=Number(String($('basePrice').value).replace(',','.'));if(!Number.isFinite(value)||value<0)return msg(saveStatus,'⚠️ Tarif de base invalide.',true);const{data,error}=await db.from('digiy_loc_master_units').update({base_price:value,price_currency:currency||'EUR',updated_at:new Date().toISOString()}).eq('id',unitId).select('id,base_price,price_currency').maybeSingle();if(error||!data)return msg(saveStatus,'⚠️ Tarif de base non enregistré'+(error?' : '+error.message:''),true);const u=currentUnit();u.base_price=Number(data.base_price);u.price_currency=data.price_currency||'EUR';syncBase();render();msg(saveStatus,'✓ Tarif de base enregistré : '+money(basePrice)+'.')}
+async function applySpecialPrice(){const dates=selectedDates();if(!dates.length)return msg(saveStatus,'⚠️ Sélectionnez une date ou une période.',true);const value=Number(String($('specialPrice').value).replace(',','.'));if(!Number.isFinite(value)||value<0)return msg(saveStatus,'⚠️ Prix spécial invalide.',true);const rows=dates.map(day=>({unit_id:unitId,day,price_override:value,updated_at:new Date().toISOString()}));const{data,error}=await db.from('digiy_loc_master_unit_prices').upsert(rows,{onConflict:'unit_id,day'}).select('day,price_override');if(error||!data||data.length!==dates.length)return msg(saveStatus,'⚠️ Prix non enregistré'+(error?' : '+error.message:''),true);data.forEach(r=>prices.set(r.day,Number(r.price_override)));render();msg(saveStatus,'✓ Prix enregistré : '+money(value)+'.')}
+async function clearSpecialPrice(){const dates=selectedDates();if(!dates.length)return msg(saveStatus,'⚠️ Sélectionnez une date ou une période.',true);const{error}=await db.from('digiy_loc_master_unit_prices').delete().eq('unit_id',unitId).in('day',dates);if(error)return msg(saveStatus,'⚠️ Retour tarif de base refusé : '+error.message,true);dates.forEach(d=>prices.delete(d));render();msg(saveStatus,'✓ Tarif de base rétabli sur la sélection.')}
+$('sendCode').addEventListener('click',sendCode);$('verifyCode').addEventListener('click',verifyCode);$('prev').addEventListener('click',()=>{current=new Date(current.getFullYear(),current.getMonth()-1,1,12);render()});$('next').addEventListener('click',()=>{current=new Date(current.getFullYear(),current.getMonth()+1,1,12);render()});$('unitSelect').addEventListener('change',async e=>{unitId=e.target.value;states.clear();prices.clear();reservations=[];resetSelection();syncBase();await loadData();render();renderReservations()});$('makeAvailable').addEventListener('click',()=>applyState('available'));$('makeOccupied').addEventListener('click',()=>applyState('occupied'));$('makeClosed').addEventListener('click',()=>applyState('closed'));$('saveBasePrice').addEventListener('click',saveBasePrice);$('applySpecialPrice').addEventListener('click',applySpecialPrice);$('clearSpecialPrice').addEventListener('click',clearSpecialPrice);$('saveReservation').addEventListener('click',savePrivateReservation);$('refreshReservations').addEventListener('click',loadReservationCarnet);$('logout').addEventListener('click',async()=>{await db.auth.signOut();units=[];unitId=null;states.clear();prices.clear();reservations=[];resetSelection();showLogin()});db.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_IN'&&session)setTimeout(()=>enter(session),0);if(event==='SIGNED_OUT')showLogin()});db.auth.getSession().then(({data})=>{if(data.session)enter(data.session)});
+})();
+</script>
+</body>
+</html>
