@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="theme-color" content="#0b3d2b">
+<title>DIGIY ASSIST — Espace propriétaire</title>
+<style>
+:root{--g:#0b4a38;--g2:#123f33;--gold:#d9ad45;--bg:#f5f2e8;--ink:#17372d;--muted:#6b7b74;--line:#d9e3dd}
+*{box-sizing:border-box}body{margin:0;min-height:100svh;background:linear-gradient(180deg,#f7f2e5,#e7efe9);color:var(--ink);font:15px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,select,textarea{font:inherit}.wrap{width:min(820px,calc(100% - 20px));margin:auto;padding:14px 0 46px}.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.brand{font-weight:1000;color:var(--g)}.back{display:inline-flex;align-items:center;text-decoration:none;color:var(--g);background:#fff;border:1px solid var(--line);border-radius:999px;padding:9px 13px;font-size:12px;font-weight:950}.panel{margin-top:13px;background:#ffffffef;border:1px solid var(--line);border-radius:25px;padding:clamp(17px,4vw,28px);box-shadow:0 16px 42px #073f3218}.eyebrow{font-size:10px;font-weight:1000;letter-spacing:.13em;text-transform:uppercase;color:#8b6819}h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(34px,8vw,54px);line-height:.98;margin:7px 0;color:var(--g)}h2,h3{color:var(--g);margin:5px 0}.lead,.hint{color:var(--muted);font-weight:720;line-height:1.5}.hint{font-size:12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.wide{grid-column:1/-1}.field{display:grid;gap:6px;margin-top:11px}.field label{font-size:11px;font-weight:1000;text-transform:uppercase;color:#587167}input,select,textarea{width:100%;border:1px solid #c9d8d0;border-radius:14px;background:#fff;color:var(--ink);padding:11px 12px}input,select{min-height:48px}textarea{min-height:116px;resize:vertical}.btn{border:0;border-radius:999px;min-height:46px;padding:10px 16px;font-weight:1000;cursor:pointer}.primary{width:100%;margin-top:15px;background:linear-gradient(135deg,#f5d879,#d9ad45,#55a46f);color:#17382d}.ghost{background:#fff;color:var(--g);border:1px solid #bfd0c7}.btn:disabled{opacity:.55;cursor:wait}.status{min-height:20px;margin-top:10px;font-size:12px;font-weight:900;color:var(--g)}.error{color:#a32626}.hidden{display:none!important}.context{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.pill{display:inline-flex;align-items:center;padding:7px 10px;border-radius:999px;background:#edf5ef;border:1px solid #d6e6dc;font-size:11px;font-weight:950}.outputs{display:grid;gap:12px;margin-top:15px}.out{border:1px solid var(--line);border-radius:19px;background:#fbfdfb;padding:14px}.outhead{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}.out pre{margin:11px 0 0;white-space:pre-wrap;word-break:break-word;background:#f4f7f4;border-radius:14px;padding:12px;line-height:1.5;font-family:inherit;font-size:14px}.actions{display:flex;gap:7px;flex-wrap:wrap}.notice{margin-top:15px;padding:12px 13px;border-radius:15px;background:#fff8df;border:1px solid #efdc9d;color:#5e4c18;font-size:12px;font-weight:800;line-height:1.45}.session{margin-top:10px;font-size:11px;color:#6b7b74;font-weight:800}@media(max-width:620px){.grid{grid-template-columns:1fr}.wide{grid-column:auto}.panel{border-radius:20px}.actions .btn{flex:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top"><div class="brand">✨ DIGIY ASSIST</div><a class="back" id="back" href="./">← Mon espace</a></header>
+
+<section class="panel" id="loading">
+<div class="eyebrow">Espace propriétaire</div><h1>Je prépare ta communication.</h1><p class="lead">Vérification de la session sécurisée…</p>
+</section>
+
+<section class="panel hidden" id="app">
+<div class="eyebrow">Assistant du professionnel</div>
+<h1>Dis-moi ce que tu veux faire.</h1>
+<p class="lead" id="intro">Une demande simple suffit. DIGIY prépare, tu relis, tu décides.</p>
+<div class="context"><span class="pill" id="modulePill"></span><span class="pill" id="sitePill"></span></div>
+<div class="grid">
+  <div class="field"><label for="intent">Objectif</label><select id="intent"><option>Faire connaître</option><option>Créer une offre</option><option>Présenter un produit ou service</option><option>Répondre à un client</option><option>Créer un texte pour un visuel</option></select></div>
+  <div class="field"><label for="zone">Zone · facultatif</label><input id="zone" placeholder="Ex. Saly · Mbour · AIBD"></div>
+  <div class="field wide"><label for="need">Ta demande</label><textarea id="need" placeholder="Ex. Je suis disponible pour les transferts AIBD ce week-end."></textarea></div>
+  <div class="field"><label for="price">Prix · facultatif</label><input id="price" placeholder="Ex. 15 000 FCFA"></div>
+  <div class="field"><label for="date">Date / disponibilité · facultatif</label><input id="date" placeholder="Ex. ce week-end"></div>
+  <div class="field wide"><label for="details">Précision utile · facultatif</label><input id="details" placeholder="Ex. 7 places · paiement direct"></div>
+</div>
+<button class="btn primary" id="generate" type="button">✨ Préparer ma communication</button>
+<p class="status" id="status" aria-live="polite"></p>
+<div class="notice">Rien n’est publié automatiquement. Tu gardes la main : tu relis, tu copies ou tu partages seulement ce que tu valides.</div>
+
+<div class="outputs hidden" id="outputs">
+  <article class="out"><div class="outhead"><h3>💬 WhatsApp</h3><div class="actions"><button class="btn ghost copy" data-target="whatsapp">Copier</button><button class="btn ghost share" data-target="whatsapp">Partager</button></div></div><pre id="whatsapp"></pre></article>
+  <article class="out"><div class="outhead"><h3>📣 Réseau social</h3><div class="actions"><button class="btn ghost copy" data-target="social">Copier</button><button class="btn ghost share" data-target="social">Partager</button></div></div><pre id="social"></pre></article>
+  <article class="out"><div class="outhead"><h3>🪪 Fiche DIGIY</h3><div class="actions"><button class="btn ghost copy" data-target="fiche">Copier</button><button class="btn ghost share" data-target="fiche">Partager</button></div></div><pre id="fiche"></pre></article>
+</div>
+<div class="session" id="session"></div>
+</section>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(()=>{
+'use strict';
+const SUPABASE_URL='https://wesqmwjjtsefyjnluosj.supabase.co';
+const SUPABASE_KEY='sb_publishable_tGHItRgeWDmGjnd0CK1DVQ_BIep4Ug3';
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,detectSessionInUrl:true}});
+const $=id=>document.getElementById(id);
+const qs=new URLSearchParams(location.search);
+const module=(qs.get('module')||'pro').trim().toLowerCase();
+const site=(qs.get('site')||'').trim();
+const labels={driver:'DIGIY DRIVER',loc:'DIGIY LOC',commerce:'MON COMMERCE',build:'DIGIY BUILD',resto:'MON RESTO',resa:'DIGIY RESA'};
+const examples={
+ driver:'Ex. Je suis disponible pour les transferts AIBD ce week-end.',
+ loc:'Ex. Il me reste une chambre libre vendredi et samedi.',
+ commerce:'Ex. J’ai reçu de nouveaux ensembles femmes aujourd’hui.',
+ build:'Ex. Je prends des chantiers de peinture à Saly cette semaine.',
+ resto:'Ex. Nous proposons un menu déjeuner demain.'
+};
+function msg(t,bad=false){$('status').textContent=t||'';$('status').classList.toggle('error',!!bad)}
+function backUrl(){if(module==='loc'&&site)return './loc.html?site='+encodeURIComponent(site);if(module==='driver'&&site)return './driver.html?site='+encodeURIComponent(site);return './'}
+function textOf(id){return $(id).textContent||''}
+async function copy(id){try{await navigator.clipboard.writeText(textOf(id));msg('✓ Texte copié.')}catch{msg('Copie impossible sur cet appareil.',true)}}
+async function share(id){
+ const text=textOf(id); if(!text)return;
+ if(navigator.share){try{await navigator.share({text});return}catch(e){if(e&&e.name==='AbortError')return}}
+ await copy(id);
+}
+async function generate(){
+ const need=$('need').value.trim();
+ if(!need)return msg('Dis-moi d’abord ce que tu veux faire.',true);
+ $('generate').disabled=true;msg('DIGIY prépare ton texte…');
+ const payload={module,site,intent:$('intent').value,need,price:$('price').value.trim(),zone:$('zone').value.trim(),date:$('date').value.trim(),details:$('details').value.trim()};
+ try{
+   const {data,error}=await db.functions.invoke('digiy-assist',{body:payload});
+   if(error)throw error;
+   if(!data||!data.outputs)throw new Error('Réponse vide');
+   ['whatsapp','social','fiche'].forEach(k=>$(k).textContent=data.outputs[k]||'');
+   $('outputs').classList.remove('hidden');
+   msg('✓ Prêt. Relis puis choisis ce que tu veux utiliser.');
+   $('outputs').scrollIntoView({behavior:'smooth',block:'start'});
+ }catch(e){console.warn('[DIGIY ASSIST]',e);msg('Assistant momentanément indisponible. Réessaie depuis ton espace propriétaire.',true)}
+ finally{$('generate').disabled=false}
+}
+$('generate').addEventListener('click',generate);
+document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>copy(b.dataset.target)));
+document.querySelectorAll('.share').forEach(b=>b.addEventListener('click',()=>share(b.dataset.target)));
+$('back').href=backUrl();
+$('modulePill').textContent=labels[module]||'DIGIY PRO';
+$('sitePill').textContent=site||'Ma fiche';
+$('need').placeholder=examples[module]||'Ex. Je veux faire connaître une nouveauté cette semaine.';
+db.auth.getSession().then(({data})=>{
+ const s=data.session;
+ if(!s){location.replace('./');return}
+ $('loading').classList.add('hidden');$('app').classList.remove('hidden');
+ $('session').textContent='Connecté : '+(s.user.email||'propriétaire');
+});
+})();
+</script>
+</body>
+</html>
