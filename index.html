@@ -120,11 +120,16 @@ async function loadOwner(session){
   }finally{loading=false}
 }
 function escapeHtml(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function ownerMagicRedirect(){
+  if(requested==='saly-chez-baptiste') return 'https://part-chez-baptiste.digiylyfe.com/gestion.html';
+  if(requested==='sarlat-chez-baptiste') return 'https://sarlat-chez-baptiste.digiylyfe.com/gestion.html';
+  return location.origin+location.pathname+location.search;
+}
 async function sendCode(){
   const email=$('email').value.trim();
   if(!email)return msg($('loginStatus'),'Indiquez votre email propriétaire.',true);
   $('sendCode').disabled=true; msg($('loginStatus'),'Envoi du code…');
-  const {error}=await db.auth.signInWithOtp({email,options:{shouldCreateUser:false}});
+  const {error}=await db.auth.signInWithOtp({email,options:{shouldCreateUser:false,emailRedirectTo:ownerMagicRedirect()}});
   $('sendCode').disabled=false;
   if(error){console.warn('[DIGIY OWNER AUTH]',error);return msg($('loginStatus'),friendly(error)+'\n'+diagnostic(error),true)}
   $('otpBlock').classList.remove('hidden');
