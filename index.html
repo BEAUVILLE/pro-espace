@@ -96,6 +96,10 @@ function locUrl(slug){return './loc.html?site='+encodeURIComponent(slug)}
 function driverUrl(slug){return './driver.html?site='+encodeURIComponent(slug)}
 async function loadOwner(session){
   if(!session||loading)return;
+  if(requestedModule==='resto' && requested){
+    location.replace('https://resto.digiylyfe.com/resa-resto/gestion.html?site='+encodeURIComponent(requested));
+    return;
+  }
   loading=true;
   try{
     $('loginCard').classList.add('hidden');
@@ -196,6 +200,7 @@ function initCoreVoice(){
 }
 function escapeHtml(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function ownerMagicRedirect(){
+  if(requestedModule==='resto' && requested) return location.origin+location.pathname+'?module=resto&site='+encodeURIComponent(requested);
   if(requested==='saly-chez-baptiste') return 'https://part-chez-baptiste.digiylyfe.com/gestion.html';
   if(requested==='sarlat-chez-baptiste') return 'https://sarlat-chez-baptiste.digiylyfe.com/gestion.html';
   return location.origin+location.pathname+location.search;
