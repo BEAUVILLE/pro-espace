@@ -217,20 +217,16 @@ async function applyState(status){
     });
     if(error)return msg(saveStatus,'⚠️ État refusé : '+error.message,true);
 
-    const rows=Array.isArray(data)?data:[];
-    const returnedDays=new Set(rows.map(row=>String(row.day)));
-    if(rows.length!==dates.length || dates.some(day=>!returnedDays.has(day))){
-      return msg(saveStatus,'⚠️ La base n’a pas confirmé toute la sélection.',true);
-    }
-
-    // DIGIY OWNER STATE VERIFY V2 — confirmer le statut sans dépendre du chargement des tarifs.
+    // Ne jamais dépendre de la forme du retour RPC pour l'affichage :
+    // relire systématiquement la table MASTER après toute écriture.
     const {data:verifyRows,error:verifyError}=await db.from('digiy_loc_master_unit_calendar')
       .select('day,status')
       .eq('unit_id',unitId)
       .in('day',dates);
     if(verifyError){
+      await loadData();
       render();
-      return msg(saveStatus,'⚠️ Relecture du statut impossible : '+verifyError.message,true);
+      return msg(saveStatus,'⚠️ Écriture effectuée, mais relecture du statut impossible : '+verifyError.message,true);
     }
 
     const verifyMap=new Map((verifyRows||[]).map(row=>[String(row.day),row.status]));
@@ -238,19 +234,18 @@ async function applyState(status){
       ? dates.every(day=>!verifyMap.has(day))
       : dates.every(day=>verifyMap.get(day)===status);
 
-    if(!persisted){
-      render();
-      return msg(saveStatus,'⚠️ État non retrouvé après relecture. Aucun faux succès affiché.',true);
-    }
+    // Recharger l'ensemble des états depuis la source de vérité avant rendu.
+    await loadData();
+    render();
 
-    // Le statut est confirmé : mettre à jour l’affichage immédiatement.
-    if(status==='available') dates.forEach(day=>states.delete(day));
-    else dates.forEach(day=>states.set(day,status));
+    if(!persisted){
+      return msg(saveStatus,'⚠️ État écrit mais non confirmé après relecture complète. Aucun faux succès affiché.',true);
+    }
 
     const label=status==='available'?'Disponible':status==='occupied'?'Occupé':'Fermé';
     resetSelection();
     render();
-    msg(saveStatus,'✓ '+label+' confirmé en base sur '+dates.length+(dates.length===1?' date.':' dates.'));
+    msg(saveStatus,'✓ '+label+' confirmé en base et calendrier rechargé sur '+dates.length+(dates.length===1?' date.':' dates.'));
 
     // DIGIY OWNER PUBLIC SYNC V3 — prévenir immédiatement une fiche publique déjà ouverte.
     const syncPayload={type:'calendar-changed',unitId,dates,status,ts:Date.now()};
