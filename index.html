@@ -92,8 +92,9 @@ function showLogin(){
   $('ownerCard').classList.add('hidden');
   $('loginCard').classList.remove('hidden');
 }
-function locUrl(slug){return './loc.html?site='+encodeURIComponent(slug)}
-function driverUrl(slug){return './driver.html?site='+encodeURIComponent(slug)}
+const OWNER_BUILD_VERSION='20261002-1412';
+function locUrl(slug){return './loc.html?site='+encodeURIComponent(slug)+'&v='+OWNER_BUILD_VERSION}
+function driverUrl(slug){return './driver.html?site='+encodeURIComponent(slug)+'&v='+OWNER_BUILD_VERSION}
 async function loadOwner(session){
   if(!session||loading)return;
   loading=true;
