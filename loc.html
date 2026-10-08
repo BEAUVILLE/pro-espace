@@ -61,7 +61,7 @@ const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSe
 const $=id=>document.getElementById(id);
 const assistLink=$('assistLink');if(assistLink)assistLink.href='./assist.html?module=loc&site='+encodeURIComponent(SITE_SLUG);
 const loginPanel=$('loginPanel'),managerPanel=$('managerPanel'),loginStatus=$('loginStatus'),saveStatus=$('saveStatus');
-let units=[],unitId=null,current=new Date(),states=new Map(),prices=new Map(),reservations=[],basePrice=78,currency='EUR',start=null,end=null;
+let units=[],unitId=null,current=new Date(),states=new Map(),prices=new Map(),reservations=[],ownerCancelV30Enabled=false,basePrice=78,currency='EUR',start=null,end=null;
 current=new Date(current.getFullYear(),current.getMonth(),1,12);
 const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const parse=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d,12)};
@@ -111,24 +111,35 @@ async function loadData(){
 }
 async function loadReservationCarnet(){
   const count=$('reservationCount');
-  if(count) count.textContent='Chargement du carnet…';
-  if(!unitId){reservations=[];renderReservations();return false;}
-  const {data,error}=await db.rpc('digiy_loc_master_list_reservations_v1',{p_unit_id:unitId});
-  if(error){
-    reservations=[];
-    if(count) count.textContent='⚠️ Carnet indisponible';
-    console.warn('[SARLAT OWNER] Carnet réservations indisponible',error);
-    renderReservations();
-    return false;
+  if(count)count.textContent='Chargement du carnet…';
+  if(!unitId){reservations=[];ownerCancelV30Enabled=false;renderReservations();return false;}
+  // V30 metadata is required for reliable cancellation; on an older
+  // server, show the legacy carnet WITHOUT ever enabling Cancel.
+  let response=await db.rpc('digiy_loc_master_list_reservations_v2',{p_unit_id:unitId});
+  let v30Ready=!response.error;
+  const unavailable=response.error &&
+    (response.error.code==='PGRST202' ||
+     /could not find the function|schema cache/i.test(response.error.message||''));
+  if(unavailable){
+    response=await db.rpc('digiy_loc_master_list_reservations_v1',{p_unit_id:unitId});
+    v30Ready=false;
   }
-  reservations=Array.isArray(data)?data:[];
-  renderReservations();
-  return true;
+  if(response.error){
+    ownerCancelV30Enabled=false;
+    reservations=[];
+    if(count)count.textContent='⚠️ Carnet indisponible';
+    console.warn('[LOC V30 OWNER] Carnet indisponible',response.error);
+    renderReservations();return false;
+  }
+  ownerCancelV30Enabled=v30Ready;
+  reservations=Array.isArray(response.data)?response.data:[];
+  renderReservations();return true;
 }
+
 function updateSelection(){const datesInput=$('reservationDates');if(!start){$('selectionLabel').textContent='Sélection : aucune date';if(datesInput)datesInput.value='';return}const label=end&&iso(end)!==iso(start)?fmt(start)+' → '+fmt(end):fmt(start);$('selectionLabel').textContent='Sélection : '+label;if(datesInput)datesInput.value=label}
 function resetSelection(){start=null;end=null;updateSelection()}
 function choose(date){if(date<today())return;if(!start||end){start=date;end=null}else if(date<start){end=start;start=date}else end=date;updateSelection();render()}
-function render(){const y=current.getFullYear(),m=current.getMonth();$('monthLabel').textContent=current.toLocaleDateString('fr-FR',{month:'long',year:'numeric'});const grid=$('calendarGrid');grid.innerHTML='';['Lu','Ma','Me','Je','Ve','Sa','Di'].forEach(x=>{const e=document.createElement('div');e.className='dow';e.textContent=x;grid.appendChild(e)});const first=new Date(y,m,1,12),offset=(first.getDay()+6)%7,last=new Date(y,m+1,0,12).getDate();for(let i=0;i<offset;i++)grid.appendChild(document.createElement('div'));const sel=new Set(selectedDates());for(let d=1;d<=last;d++){const date=new Date(y,m,d,12),key=iso(date),b=document.createElement('button');b.type='button';b.className='day';b.dataset.date=key;const shown=prices.has(key)?prices.get(key):basePrice;const booking=reservations.find(r=>key>=r.start_day&&key<=r.end_day);b.innerHTML='<span>'+d+'</span><small class="day-price">'+money(shown)+'</small>'+(booking?'<small class="guest-mark">👤</small>':'');if(booking)b.title=booking.guest_name+' · '+booking.guest_phone;if(date<today())b.disabled=true;const state=states.get(key);if(state)b.classList.add(state);if(sel.has(key))b.classList.add('selected');if(key===iso(today()))b.classList.add('today');b.addEventListener('click',()=>choose(date));grid.appendChild(b)}}
+function render(){const y=current.getFullYear(),m=current.getMonth();$('monthLabel').textContent=current.toLocaleDateString('fr-FR',{month:'long',year:'numeric'});const grid=$('calendarGrid');grid.innerHTML='';['Lu','Ma','Me','Je','Ve','Sa','Di'].forEach(x=>{const e=document.createElement('div');e.className='dow';e.textContent=x;grid.appendChild(e)});const first=new Date(y,m,1,12),offset=(first.getDay()+6)%7,last=new Date(y,m+1,0,12).getDate();for(let i=0;i<offset;i++)grid.appendChild(document.createElement('div'));const sel=new Set(selectedDates());for(let d=1;d<=last;d++){const date=new Date(y,m,d,12),key=iso(date),b=document.createElement('button');b.type='button';b.className='day';b.dataset.date=key;const shown=prices.has(key)?prices.get(key):basePrice;const booking=reservations.find(r=>r.status!=='cancelled'&&key>=r.start_day&&key<=r.end_day);b.innerHTML='<span>'+d+'</span><small class="day-price">'+money(shown)+'</small>'+(booking?'<small class="guest-mark">👤</small>':'');if(booking)b.title=booking.guest_name+' · '+booking.guest_phone;if(date<today())b.disabled=true;const state=states.get(key);if(state)b.classList.add(state);if(sel.has(key))b.classList.add('selected');if(key===iso(today()))b.classList.add('today');b.addEventListener('click',()=>choose(date));grid.appendChild(b)}}
 function reservationMessage(r){
   const dates=r.start_day===r.end_day?r.start_day:(r.start_day+' au '+r.end_day);
   return 'Bonjour '+r.guest_name+', concernant votre séjour Chez Baptiste Sarlat du '+dates+', je vous contacte pour vous transmettre des informations complémentaires.';
@@ -144,7 +155,7 @@ function renderReservations(){
     const card=document.createElement('article');card.className='reservation-card'+(upcoming?'':' history');
     const head=document.createElement('div');head.className='reservation-card-head';
     const name=document.createElement('strong');name.textContent='👤 '+r.guest_name;head.appendChild(name);
-    const badge=document.createElement('span');badge.className='reservation-badge';badge.textContent=upcoming?'À venir':'Historique';head.appendChild(badge);
+    const badge=document.createElement('span');badge.className='reservation-badge';badge.textContent=r.status==='cancelled'?'Annulée':(upcoming?'À venir':'Historique');head.appendChild(badge);
     card.appendChild(head);
     const startDate=fmt(parse(r.start_day)),endDate=fmt(parse(r.end_day));
     const meta=document.createElement('div');meta.className='reservation-meta';meta.textContent=(r.start_day===r.end_day?startDate:startDate+' → '+endDate)+' · '+r.guest_phone+(r.source?' · '+r.source:'');card.appendChild(meta);
@@ -153,10 +164,50 @@ function renderReservations(){
     const sms=document.createElement('a');sms.className='sms-action';sms.textContent='📩 SMS';sms.href='sms:'+r.guest_phone+'?body='+encodeURIComponent(reservationMessage(r));actions.appendChild(sms);
     const digits=String(r.guest_phone||'').replace(/\D/g,'');
     if(digits){const wa=document.createElement('a');wa.className='wa-action';wa.textContent='💬 WhatsApp';wa.href='https://wa.me/'+digits+'?text='+encodeURIComponent(reservationMessage(r));wa.target='_blank';wa.rel='noopener';actions.appendChild(wa);}
-    card.appendChild(actions);box.appendChild(card);
+    
+       // No cancellation action on old v1 backend or already cancelled row.
+       if(ownerCancelV30Enabled && r.status==='active'){
+         const cancelButton=document.createElement('button');
+         cancelButton.type='button';cancelButton.className='btn ghost';
+         cancelButton.textContent='✕ Annuler cette réservation';
+         cancelButton.setAttribute('aria-label','Annuler la réservation de '+r.guest_name);
+         cancelButton.addEventListener('click',()=>cancelPrivateReservation(r,cancelButton));
+         actions.appendChild(cancelButton);
+       }
+       card.appendChild(actions);box.appendChild(card);
   });
 }
 // DIGIY SARLAT PRIVATE RESERVATION VERIFY V2 — même chaîne de vérité que le bouton Occupé.
+async function cancelPrivateReservation(r,button){
+  if(!ownerCancelV30Enabled||r.status!=='active'||!r.id)return;
+  if(!window.confirm(
+    'Annuler la réservation de '+r.guest_name+' ('+r.start_day+' → '+r.end_day+') ?\n\n'+
+    'La fiche sera conservée dans l’historique et seules les dates libérables seront ouvertes. '+ 
+    'Aucun message automatique ne sera envoyé au client.'
+  ))return;
+  button.disabled=true;
+  msg(saveStatus,'Annulation de cette réservation…');
+  try{
+    const {data,error}=await db.rpc('digiy_loc_master_cancel_reservation_v1',{
+      p_reservation_id:r.id,p_reason:'Annulation confirmée par le propriétaire'
+    });
+    if(error){msg(saveStatus,'⚠️ Annulation refusée : '+error.message,true);return;}
+    if(!data||data.ok!==true||data.status!=='cancelled'){
+      msg(saveStatus,'⚠️ Annulation non confirmée par le serveur.',true);return;
+    }
+    await loadData();render();renderReservations();
+    const sync={type:'calendar-changed',unitId,dates:[],status:'available',ts:Date.now()};
+    try{const channel=new BroadcastChannel('digiy-loc-'+SITE_SLUG);channel.postMessage(sync);channel.close();}catch(_e){}
+    try{localStorage.setItem('digiy-loc-'+SITE_SLUG+'-sync',JSON.stringify(sync));}catch(_e){}
+    const kept=Number(data.retained_blocked_days||0);
+    msg(saveStatus,kept
+      ?'✓ Réservation annulée, historique conservé. ⚠️ '+kept+' date(s) restent bloquées : vérification manuelle nécessaire.'
+      :'✓ Réservation annulée, historique conservé, disponibilités synchronisées.');
+  }catch(e){
+    msg(saveStatus,'⚠️ Annulation non confirmée : '+(e?.message||'erreur'),true);
+  }finally{button.disabled=false;}
+}
+
 async function savePrivateReservation(){
   const dates=selectedDates();
   if(!dates.length)return msg(saveStatus,'⚠️ Sélectionnez d’abord une date ou une période.',true);
