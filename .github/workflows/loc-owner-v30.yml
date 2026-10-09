@@ -1,0 +1,24 @@
+name: DIGIY LOC V30 owner UI SARLAT
+on:
+  pull_request:
+    paths:
+      - "loc.html"
+      - "tests/loc-owner-v30.test.cjs"
+      - ".github/workflows/loc-owner-v30.yml"
+permissions:
+  contents: read
+jobs:
+  owner-ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Parse actual HTML and test owner legacy/V30 routing, no external traffic
+        env:
+          LOC_OWNER_FILE: loc.html
+        run: node --test tests/loc-owner-v30.test.cjs
