@@ -28,7 +28,7 @@ class LocProWorld10(unittest.TestCase):
         for page in (ENTRY,LOC):
             self.assertEqual(page.count('<script src="./loc-pro-world10.js?v=20261117-world10-visible" defer></script>'),1)
             self.assertEqual(page.count('id="locProWorld10"'),1)
-            picker=re.search(r'<select id="locProWorld10"[\\s\\S]*?</select>',page)
+            picker=re.search(r'<select id="locProWorld10".*?</select>',page,re.S)
             self.assertIsNotNone(picker)
             self.assertEqual(picker.group(0).count('<option value='),10)
         for key in [
