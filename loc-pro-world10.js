@@ -112,7 +112,7 @@ function translateNode(node){
 function translateAttrs(){
  for(const attr of ["placeholder","aria-label","title"]){
    document.querySelectorAll("["+attr+"]").forEach(el=>{
-     if(isPrivate(el))return;
+     if(el.closest("#digiyCoreOwner,#siteTitle,#unitSelect"))return; // Placeholder UI yes, private field values never
      const now=el.getAttribute(attr);
      if(!now)return;
      let m=originalAttr.get(el);if(!m){m={};originalAttr.set(el,m);}
