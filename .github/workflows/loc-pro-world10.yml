@@ -1,0 +1,31 @@
+name: DIGIY LOC PRO · WORLD10 calendrier propriétaire
+on:
+  pull_request:
+    paths:
+      - 'index.html'
+      - 'loc.html'
+      - 'loc-pro-world10.js'
+      - 'tests/test_loc_pro_world10.py'
+      - 'tests/loc-pro-world10.test.cjs'
+      - '.github/workflows/loc-pro-world10.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'loc.html'
+      - 'loc-pro-world10.js'
+      - 'tests/test_loc_pro_world10.py'
+      - 'tests/loc-pro-world10.test.cjs'
+      - '.github/workflows/loc-pro-world10.yml'
+permissions:
+  contents: read
+jobs:
+  loc-pro-world10:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit 10 langues LOC, droits existants, calendrier et réservation
+        run: python3 -m unittest discover -s tests -p 'test_loc_pro_world10.py' -v
+      - name: Simulation d'écran FR EN AR WO ZH et conservation des données privées
+        run: node --test tests/loc-pro-world10.test.cjs
