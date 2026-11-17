@@ -70,7 +70,7 @@ const today=()=>{const n=new Date();return new Date(n.getFullYear(),n.getMonth()
 const fmt=d=>d.toLocaleDateString(window.DIGIY_LOC_WORLD10?.locale?.()||'fr-FR',{day:'numeric',month:'long',year:'numeric'});
 const between=(a,b)=>{const out=[];for(let d=new Date(a);d<=b;d.setDate(d.getDate()+1))out.push(iso(d));return out};
 const selectedDates=()=>start?between(start,end||start):[];
-const money=v=>{const n=Number(v);return Number.isFinite(n)?n.toLocaleString('fr-FR',{maximumFractionDigits:2})+' '+(currency==='EUR'?'€':currency):'—'};
+const money=v=>{const n=Number(v);return Number.isFinite(n)?n.toLocaleString(window.DIGIY_LOC_WORLD10?.locale?.()||'fr-FR',{maximumFractionDigits:2})+' '+(currency==='EUR'?'€':currency):'—'};
 function msg(el,text,bad=false){el.textContent=text||'';el.classList.toggle('error',bad)}
 function showManager(email){loginPanel.classList.add('hidden');managerPanel.classList.remove('hidden');$('sessionEmail').textContent='Connecté : '+email}
 function showLogin(){const language=window.DIGIY_LOC_WORLD10?.getLang?.()||new URLSearchParams(location.search).get('lang')||'fr';location.replace('./?site='+encodeURIComponent(SITE_SLUG)+'&module=loc&lang='+encodeURIComponent(language))}
@@ -181,11 +181,11 @@ function renderReservations(){
 // DIGIY SARLAT PRIVATE RESERVATION VERIFY V2 — même chaîne de vérité que le bouton Occupé.
 async function cancelPrivateReservation(r,button){
   if(!ownerCancelV30Enabled||r.status!=='active'||!r.id)return;
-  if(!window.confirm(
+  if(!window.confirm(window.DIGIY_LOC_WORLD10?.confirmCancel?.(r) || (
     'Annuler la réservation de '+r.guest_name+' ('+r.start_day+' → '+r.end_day+') ?\n\n'+
-    'La fiche sera conservée dans l’historique et seules les dates libérables seront ouvertes. '+ 
+    'La fiche sera conservée dans l’historique et seules les dates libérables seront ouvertes. '+
     'Aucun message automatique ne sera envoyé au client.'
-  ))return;
+  )))return;
   button.disabled=true;
   msg(saveStatus,'Annulation de cette réservation…');
   try{
