@@ -6,7 +6,7 @@ const source=fs.readFileSync(path.join(__dirname,'../loc-pro-world10.js'),'utf8'
 function setup(data){
   const nodes=data.map(e=>{
     const parent={
-      content:e.text,
+      textContent:e.text,
       closest(selector){
         if(e.kind==='client'&&selector.includes('#reservationList')&&!selector.includes('reservation-badge'))return {};
         if(e.kind==='business'&&selector.includes('#siteTitle'))return {};
