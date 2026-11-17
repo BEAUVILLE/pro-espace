@@ -28,7 +28,9 @@ class LocProWorld10(unittest.TestCase):
         for page in (ENTRY,LOC):
             self.assertEqual(page.count('<script src="./loc-pro-world10.js?v=20261117-world10-visible" defer></script>'),1)
             self.assertEqual(page.count('id="locProWorld10"'),1)
-            self.assertEqual(page.count('<option value='),10)
+            picker=re.search(r'<select id="locProWorld10"[\\s\\S]*?</select>',page)
+            self.assertIsNotNone(picker)
+            self.assertEqual(picker.group(0).count('<option value='),10)
         for key in [
             "Calendrier propriétaire","📒 Carnet des réservations",
             "Disponible","Occupé","Fermé","🔒 Enregistrer la réservation",
@@ -45,7 +47,9 @@ class LocProWorld10(unittest.TestCase):
         rows={row[0] for row in translations()}
         brand_or_data={
             "DIGIYLYFE · MASTER LOC","Booking.com","Airbnb","WhatsApp",
-            "votre@email.com","78","+33… / +221…"
+            "votre@email.com","78","+33… / +221…","Langue / Language",
+            "🇫🇷 FR","🇬🇧 EN","🇪🇸 ES","🇵🇹 PT","🇩🇪 DE",
+            "🇮🇹 IT","🇳🇱 NL","🇸🇦 AR","🇸🇳 WO","🇨🇳 ZH"
         }
         html=re.sub(r"<script\b[^>]*>[\s\S]*?</script>","",LOC,flags=re.I)
         html=re.sub(r"<style\b[^>]*>[\s\S]*?</style>","",html,flags=re.I)
