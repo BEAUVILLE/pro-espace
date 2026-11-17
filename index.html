@@ -51,6 +51,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./loc-pro-world10.js" defer></script>
 <script>
 (()=>{
 'use strict';
@@ -93,7 +94,7 @@ function showLogin(){
   $('loginCard').classList.remove('hidden');
 }
 const OWNER_BUILD_VERSION='20261002-1412';
-function locUrl(slug){return './loc.html?site='+encodeURIComponent(slug)+'&v='+OWNER_BUILD_VERSION}
+function locUrl(slug){const language=window.DIGIY_LOC_WORLD10?.getLang?.()||new URLSearchParams(location.search).get('lang')||localStorage.getItem('digiy_loc_pro_lang')||'fr';return './loc.html?site='+encodeURIComponent(slug)+'&v='+OWNER_BUILD_VERSION+'&lang='+encodeURIComponent(language)}
 function driverUrl(slug){return './driver.html?site='+encodeURIComponent(slug)+'&v='+OWNER_BUILD_VERSION}
 async function loadOwner(session){
   if(!session||loading)return;
