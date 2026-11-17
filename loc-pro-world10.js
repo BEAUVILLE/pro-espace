@@ -43,7 +43,60 @@ const originalText=new WeakMap(),originalAttr=new WeakMap();
 let translating=false;
 function getLocale(){return formats[idx()];}
 function weekdays(){return weekdayRows.map(r=>r[idx()]);}
+const cancelPrompts=[
+ ["Annuler la réservation de ","La fiche restera dans l’historique. Seules les dates libérables seront rouvertes. Aucun message automatique ne sera envoyé au client."],
+ ["Cancel booking for ","The record stays in history. Only releasable dates will reopen. No automatic message will be sent to the guest."],
+ ["Cancelar la reserva de ","La ficha quedará en el historial. Solo se abrirán las fechas liberables. No se enviará mensaje automático."],
+ ["Cancelar a reserva de ","A ficha permanece no histórico. Só as datas livres serão reabertas. Nenhuma mensagem automática será enviada."],
+ ["Buchung stornieren für ","Der Eintrag bleibt im Verlauf. Nur freigebbare Tage werden geöffnet. Keine automatische Nachricht an den Gast."],
+ ["Annulla la prenotazione di ","La scheda resta nello storico. Solo le date liberabili saranno riaperte. Nessun messaggio automatico all'ospite."],
+ ["Reservering annuleren voor ","De registratie blijft bewaard. Alleen vrij te geven datums worden geopend. Geen automatisch bericht aan de gast."],
+ ["إلغاء حجز ","سيظل السجل في التاريخ. ستُفتح التواريخ القابلة للإتاحة فقط. لن تُرسل رسالة تلقائية للضيف."],
+ ["Neenal rezervaasiyoŋu ","Fich bi dina des ci jaar-jaar. Bés yi mën a ubbi rekk lañuy ubbi. Duñu yonnee kiliyaan bi bataaxal automatig."],
+ ["取消预订：","记录会保留在历史中。仅重新开放可释放的日期。不会自动通知客人。"]
+];
+function confirmCancel(record){
+ const c=cancelPrompts[idx()];
+ return c[0]+String(record.guest_name||"")+" ("+String(record.start_day||"")+" → "+String(record.end_day||"")+") ?\n\n"+c[1];
+}
+function statusWithCount(source){
+ let m=source.match(/^✓ (Disponible|Occupé|Fermé) confirmé en base et calendrier rechargé sur (\d+) dates?\.$/);
+ if(m){
+   const value=t(m[1]),n=Number(m[2]);
+   const tail=[
+     " confirmé en base et calendrier rechargé sur "+n+(n===1?" date.":" dates."),
+     " confirmed in database; calendar reloaded for "+n+(n===1?" date.":" dates."),
+     " confirmado en base; calendario recargado para "+n+(n===1?" fecha.":" fechas."),
+     " confirmado na base; calendário atualizado para "+n+(n===1?" data.":" datas."),
+     " in Datenbank bestätigt; Kalender für "+n+(n===1?" Tag":" Tage")+" neu geladen.",
+     " confermato nel database; calendario aggiornato per "+n+(n===1?" data.":" date."),
+     " bevestigd in database; kalender vernieuwd voor "+n+(n===1?" datum.":" datums."),
+     " تم تأكيده في قاعدة البيانات وتحديث التقويم لـ "+n+" يوم.",
+     " dëggal na ci base, kalandiriye yeesal na ngir "+n+" bés.",
+     " 已在数据库确认，日历已刷新 "+n+" 天。"
+   ];
+   return "✓ "+value+tail[idx()];
+ }
+ m=source.match(/^✓ Réservation annulée, historique conservé\. ⚠️ (\d+) date\(s\) restent bloquées : vérification manuelle nécessaire\.$/);
+ if(m){
+   const n=m[1];
+   return [
+     "✓ Réservation annulée, historique conservé. ⚠️ "+n+" date(s) restent bloquées : vérification manuelle nécessaire.",
+     "✓ Booking cancelled and history kept. ⚠️ "+n+" dates remain blocked: manual review required.",
+     "✓ Reserva cancelada e historial conservado. ⚠️ "+n+" fechas siguen bloqueadas: revisión manual.",
+     "✓ Reserva cancelada e histórico guardado. ⚠️ "+n+" datas continuam bloqueadas: verificação manual.",
+     "✓ Buchung storniert, Verlauf erhalten. ⚠️ "+n+" Tage bleiben gesperrt: manuelle Prüfung nötig.",
+     "✓ Prenotazione annullata, storico conservato. ⚠️ "+n+" date restano bloccate: verifica manuale.",
+     "✓ Reservering geannuleerd, historie bewaard. ⚠️ "+n+" datums blijven geblokkeerd: handmatige controle.",
+     "✓ أُلغي الحجز مع حفظ السجل. ⚠️ "+n+" تواريخ ما زالت محجوبة وتحتاج مراجعة يدوية.",
+     "✓ Neenal nañu rezervaasiyoŋ bi, jaar-jaar des na. ⚠️ "+n+" bés yu ñu tëj des nañu, war nañu seet.",
+     "✓ 预订已取消，历史记录保留。⚠️ 仍有 "+n+" 天锁定，需人工检查。"
+   ][idx()];
+ }
+ return null;
+}
 function translationOf(source){
+ const counted=statusWithCount(source);if(counted!==null)return counted;
  if(phrases.has(source))return t(source);
  if(source.startsWith("Sélection : ") && source!=="Sélection : aucune date")
    return t("Sélection : ")+source.slice("Sélection : ".length);
@@ -176,7 +229,7 @@ function boot(){
  }
  translatePage();
  new MutationObserver(()=>translatePage()).observe(document.body,{subtree:true,characterData:true,childList:true});
- window.DIGIY_LOC_WORLD10={locales:langs.slice(),getLang:()=>lang,setLang,locale:getLocale,weekdays,t,translatePage};
+ window.DIGIY_LOC_WORLD10={locales:langs.slice(),getLang:()=>lang,setLang,locale:getLocale,weekdays,t,translatePage,confirmCancel};
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot,{once:true});
 else boot();
