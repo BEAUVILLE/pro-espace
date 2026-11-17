@@ -26,7 +26,11 @@ class LocProWorld10(unittest.TestCase):
             self.assertEqual(len(row),10,row[0])
             self.assertTrue(all(isinstance(x,str) and x.strip() for x in row),row[0])
         for page in (ENTRY,LOC):
-            self.assertEqual(page.count('<script src="./loc-pro-world10.js" defer></script>'),1)
+            self.assertEqual(page.count('<script src="./loc-pro-world10.js?v=20261117-world10-visible" defer></script>'),1)
+            self.assertEqual(page.count('id="locProWorld10"'),1)
+            picker=re.search(r'<select id="locProWorld10".*?</select>',page,re.S)
+            self.assertIsNotNone(picker)
+            self.assertEqual(picker.group(0).count('<option value='),10)
         for key in [
             "Calendrier propriétaire","📒 Carnet des réservations",
             "Disponible","Occupé","Fermé","🔒 Enregistrer la réservation",
@@ -36,12 +40,16 @@ class LocProWorld10(unittest.TestCase):
         ]:
             self.assertIn(key,{row[0] for row in rows})
         self.assertIn("lang===\"ar\"?\"rtl\":\"ltr\"",I18N)
+        self.assertIn("if(select){",I18N)
+        self.assertIn('select.addEventListener("change",()=>setLang(select.value))',I18N)
 
     def test_all_loc_owner_static_controls_localized(self):
         rows={row[0] for row in translations()}
         brand_or_data={
             "DIGIYLYFE · MASTER LOC","Booking.com","Airbnb","WhatsApp",
-            "votre@email.com","78","+33… / +221…"
+            "votre@email.com","78","+33… / +221…","Langue / Language",
+            "🇫🇷 FR","🇬🇧 EN","🇪🇸 ES","🇵🇹 PT","🇩🇪 DE",
+            "🇮🇹 IT","🇳🇱 NL","🇸🇦 AR","🇸🇳 WO","🇨🇳 ZH"
         }
         html=re.sub(r"<script\b[^>]*>[\s\S]*?</script>","",LOC,flags=re.I)
         html=re.sub(r"<style\b[^>]*>[\s\S]*?</style>","",html,flags=re.I)

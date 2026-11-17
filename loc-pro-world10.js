@@ -217,14 +217,19 @@ function setLang(next){
 }
 function boot(){
  const header=document.querySelector("header.top");
- if(header&&!document.getElementById("locProWorld10")){
-   const select=document.createElement("select");select.id="locProWorld10";
+ let select=document.getElementById("locProWorld10");
+ if(!select&&header){
+   select=document.createElement("select");select.id="locProWorld10";
    select.setAttribute("aria-label","Langue");
    select.style.cssText="flex-shrink:0;max-width:120px;min-height:40px;border:2px solid #d8ad46;border-radius:12px;background:#fffefa;color:#073f32;padding:7px;font:900 12px system-ui;direction:ltr";
    for(let i=0;i<langs.length;i++){
      const option=document.createElement("option");option.value=langs[i];option.textContent=display[i];select.appendChild(option);
    }
    header.appendChild(select);
+ }
+ // Bind either the visible HTML selector or the dynamically created fallback.
+ if(select){
+   select.value=lang;
    select.addEventListener("change",()=>setLang(select.value));
  }
  translatePage();

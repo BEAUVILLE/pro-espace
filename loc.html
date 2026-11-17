@@ -12,7 +12,9 @@
 </head>
 <body>
 <div class="wrap">
-<header class="top"><div class="brand">DIGIYLYFE · MASTER LOC<small>Gestion propriétaire centralisée</small></div><a class="back" href="./">← Mes fiches</a></header>
+<header class="top"><div class="brand">DIGIYLYFE · MASTER LOC<small>Gestion propriétaire centralisée</small></div><a class="back" href="./">← Mes fiches</a><select id="locProWorld10" aria-label="Langue / Language" style="flex-shrink:0;max-width:133px;min-height:42px;border:2px solid #d8ad46;border-radius:12px;background:#fffefa;color:#073f32;padding:7px;font:900 12px system-ui;direction:ltr">
+<option value="fr">🇫🇷 FR</option><option value="en">🇬🇧 EN</option><option value="es">🇪🇸 ES</option><option value="pt">🇵🇹 PT</option><option value="de">🇩🇪 DE</option><option value="it">🇮🇹 IT</option><option value="nl">🇳🇱 NL</option><option value="ar">🇸🇦 AR</option><option value="wo">🇸🇳 WO</option><option value="zh">🇨🇳 ZH</option>
+</select></header>
 <section class="panel hidden" id="loginPanel">
 <span class="eyebrow">Accès privé</span><h1>Gérer mes dates.</h1><p class="muted">Connectez-vous pour gérer Libre / Occupé / Fermé et vos tarifs.</p>
 <div class="field"><label for="email">Email propriétaire</label><input id="email" type="email" autocomplete="email" placeholder="votre@email.com"></div>
@@ -51,7 +53,7 @@
 </section>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="./loc-pro-world10.js" defer></script>
+<script src="./loc-pro-world10.js?v=20261117-world10-visible" defer></script>
 <script>
 (()=>{
 'use strict';
